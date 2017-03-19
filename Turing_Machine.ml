@@ -6,6 +6,8 @@
  *
  *)
 
+
+  
 open Alphabet
 open State
 open Pattern
@@ -106,7 +108,7 @@ module Turing_Machine =
 	      
     let (first_blank_on_the: Moving.t -> turing_machine) = find_symbol_on_the B 
       
-    let (second_blank_on_the: moving -> turing_machine) = fun direction ->
+    let (second_blank_on_the: Moving.t -> turing_machine) = fun direction ->
 	  let init = nop.initial and accept = nop.accept in
 	    { nop with
 	      name = String.concat "_" [ "second_blank_on_the" ; Moving.to_ascii direction ] ;
@@ -349,4 +351,8 @@ module Turing_Machine =
 	   ]
 	  }
 
+	
+	    
   end)
+
+    

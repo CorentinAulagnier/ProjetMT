@@ -1,4 +1,4 @@
-(* MichaÃ«l PÃ‰RIN, Verimag / UniversitÃ© Grenoble-Alpes, FÃ©vrier 2017 
+(* Michaël PÉRIN, Verimag / Université Grenoble-Alpes, Février 2017 
  *
  * Part of the project TURING MACHINES FOR REAL
  *
@@ -70,13 +70,7 @@ module Band =
 
     let (write: symbol -> band -> band) = fun symbol band ->
 	  { band with head = symbol }
-	    
-    (* Translation: PROJET 2017 
-	    
-    let (translate_to_binary: band -> band) = fun band ->
-	  let map = Translate.create_binary_map band.alphabet
-	  in Translate.translate_using map band
-     *)
+
 
 
     let rec (zip_complete_with: 'op -> 'op list -> band list -> ('op * band) list) = fun nop operations bands ->
@@ -215,4 +209,3 @@ end)
 
 </TABLE>  
 *)
-

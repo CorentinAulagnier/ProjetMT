@@ -1,4 +1,4 @@
-(* MichaÃ«l PÃ‰RIN, Verimag / UniversitÃ© Grenoble-Alpes, FÃ©vrier 2017 
+(* Michaël PÉRIN, Verimag / Université Grenoble-Alpes, Février 2017 
  *
  * lambda terms, reduction with tracing of beta-reduction 
  *
@@ -258,7 +258,6 @@ module Lambda_Term =
  *)
 
     
-
 
 
 

@@ -39,7 +39,7 @@ module Configuration =
 
     let make ?time:(time=false) : (Turing_Machine.t -> Band.t list -> configuration) = fun tm bands ->
 	  let
-	      filename = if time then String.concat "_" [ Date.pretty_time() ; name tm bands ] else name tm bands 
+	      filename = if time then begin Date.sleep_for 0.1 ; String.concat "_" [ Date.pretty_time() ; name tm bands ] end else name tm bands 
 	  in
 	  { tm = tm ;
 	    bands = bands ;
@@ -66,10 +66,15 @@ module Configuration =
     let (to_html: Html.options -> configuration -> Html.table) = fun options cfg ->
 	  let tm_name = Html.cell [] cfg.tm.name
 	      
-	  and state = State.to_html [] cfg.state
-	      
 	  and bands = Html.cell [] (Band.to_html_many options cfg.bands)
-	  in
+
+	  and state =
+	         let state_color =
+		   if cfg.state = cfg.tm.accept then Color.green
+		   else if cfg.state = cfg.tm.reject then Color.red
+		   else Color.white
+		 in State.to_html [("bgcolor", Html.Color state_color)] cfg.state
+    	  in
 	    Html.table
 	      (options @ [ ("bordercolor", Html.Color Color.gray) ; ("cellpadding",Html.Int 0) ; ("cellspacing",Html.Int 0) ; ("border",Html.Int 1) ])
 	      [ tm_name ; state ; bands ]

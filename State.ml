@@ -1,4 +1,4 @@
-(* MichaÃ«l PÃ‰RIN, Verimag / UniversitÃ© Grenoble-Alpes, FÃ©vrier 2017 
+(* Michaël PÉRIN, Verimag / Université Grenoble-Alpes, Février 2017 
  *
  * Representation of The states of a Turing Machine
  *
@@ -36,6 +36,11 @@ module State =
 	   
     (* AVOIDING CLASH BETWEEN STATES *)	
 
+    let (next_from: state -> state) = function
+      | Q int -> Q(int+1)
+      | Qs(int,symbols) -> Qs(int+1, symbols)
+      | Qc(string,ints) -> Qc(string, 1::ints)
+
     let (fresh_from: state -> state) = function
       | Q int -> Qs(int,[])
       | Qs(int,symbols) -> Qs(int, B::symbols)
@@ -48,7 +53,7 @@ module State =
     let rec (to_ascii: state -> string) = fun state ->
 	  match state with
 	  | Q(i) -> "Q" ^ (string_of_int i)
-	  | Qs(i,symbols) -> String.concat "" [ "Q" ; string_of_int i ; "_" ; Symbol.to_ascii (Vector symbols) ]
+	  | Qs(i,symbols) -> String.concat "" [ "Q" ; string_of_int i ; Pretty.list Symbol.to_ascii symbols ]
 	  | Qc(name,integers) ->
 		  match integers with
 		  | [] -> name
@@ -73,4 +78,3 @@ module State =
       | Pretty.Ascii -> to_ascii
 
   end)
-

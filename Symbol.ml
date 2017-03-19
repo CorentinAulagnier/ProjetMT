@@ -1,4 +1,4 @@
-(* MichaÃ«l PÃ‰RIN, Verimag / UniversitÃ© Grenoble-Alpes, FÃ©vrier 2017 
+(* Michaël PÉRIN, Verimag / Université Grenoble-Alpes, Février 2017 
  *
  * Part of the project: TURING MACHINES FOR REAL
  *
@@ -116,4 +116,3 @@ module Symbol =
 	  | Pretty.Ascii -> to_ascii t
 		    
 end)
-

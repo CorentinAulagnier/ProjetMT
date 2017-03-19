@@ -1,4 +1,4 @@
-(* MichaÃ«l PÃ‰RIN, Verimag / UniversitÃ© Grenoble-Alpes, FÃ©vrier 2017 
+(* Michaël PÉRIN, Verimag / Université Grenoble-Alpes, Février 2017 
  *
  * Part of the project TURING MACHINES FOR REAL
  *
@@ -43,6 +43,8 @@ module Alphabet =
 	    }
 
     let (binary: alphabet) = make [Bit.zero ; Bit.unit]
+
+    let (full: alphabet) = make [D;U;Z;S;L;O;C;X]
 	
   end)
 
@@ -55,4 +57,3 @@ open Tricks (* provides >> *)
 let _ = Pretty.print ~format:Ascii (fun _ -> (String.concat "\n" [ "\n\n* DEMO * Alphabet.ml:\n" ; (Bits.enumerate 8) >> Bits.prettys ]))
 
   
-

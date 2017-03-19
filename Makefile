@@ -1,28 +1,35 @@
+# Michaël PÉRIN, Verimag / Université Grenoble-Alpes, Février 2017 
+#
+# Part of the project TURING MACHINES FOR REAL
+#
+#
+SOL =
 #
 
-
-MODULES =  Fresh Lambda_Calcul Option Tricks MyList MyString Pretty Bit_Vector Date Logger Color Html Pattern Symbol State Alphabet Band Action Transition Turing_Machine Configuration Execution LC_by_MT Demo Emulator
+MODULES = Fresh Lambda_Calcul Option Tricks MyList MyString Pretty Bit_Vector Date Logger Color Html Pattern Symbol State Alphabet Band Action Transition Turing_Machine Configuration Execution LC_by_MT Demo Emulator $(SOL)
 
 ML  = $(addsuffix  .ml, $(MODULES))
 CMO = $(addsuffix .cmo, $(MODULES))
 CMA = graphics.cma unix.cma
 
 # The compiler with option
-OCAMLC = ocamlc -w -8 
+OCAMLC = ocamlc -w -8 -w -26
 
 # directory needed for logging execution traces
 log_dir = _log
 
 
+#
+
 help:
 	@echo ""
 	@echo "Here are the possible commands:"
 	@echo "  make cmo ...... produces .cmo files. This command is used by"
-	@echo "  make run .... produces an executable called \"run\" and executes it"
-	@echo "  make play ... load the .cmo files in the ocaml interpreter. Type #use \"main.ml\";;  to execute it."
+	@echo "  make run ...... produces an executable called \"run\" and executes it"
+	@echo "  make play ..... load the .cmo files in the ocaml interpreter. Type #use \"main.ml\";;  in the interpreter to execute the main function."
 	@echo "  make clean .... delete compilation files"
 
-cmo: $(ML)
+cmo: $(ML) main.ml
 	@$(OCAMLC) $(CMA) $(ML) main.ml -o run
 
 
@@ -31,16 +38,17 @@ play: $(log_dir)
 	@echo "#use \"main.ml\";;" > .ledit_history
 	@ledit ocaml $(CMA) $(CMO) 
 
-
 run: $(log_dir)
 	@make cmo
 	@$(OCAMLC) $(CMA) $(CMO) main.ml -o run
 	@./run
 
 clean:
-	@rm -f a.out run *.cm* *.skl *~
-
+	@rm -f a.out run *.cm* *~
 #
+
+%.ml: %.cp4
+	@camlp4o -impl $< -o $@
 
 %.cmo: %.ml
 	@ocamlc *.cmo $< 
@@ -48,4 +56,4 @@ clean:
 $(log_dir):
 	@if test ! -d $(log_dir); then mkdir $(log_dir)/; fi
 
-.PHONY: help cmo play run clean 
+.PHONY: help cmo play run clean
