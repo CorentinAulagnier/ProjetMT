@@ -14,7 +14,8 @@ open Transition
 open Turing_Machine
 open Configuration
 open Execution
-  
+
+ 
 let (incr_decr: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;Z;U;D] in
 	let band1 = Band.make alphabet [U;U;Z;U] in
@@ -89,6 +90,118 @@ let (busy_beaver: Turing_Machine.t -> Configuration.t) = fun bb ->
 	  let cfg = Configuration.make bb [ band ] in
 	    Execution.log_run cfg 
 
+(*Test Partie2 projet : B-Reduction *)
+
+(* MT à utiliser
+ *
+ * let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
+ *
+ * let question2 = Turing_Machine.sequence [ Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.good_remplacement ] in
+ *
+ * let question3 = Turing_Machine.sequence [ Run Turing_Machine. ; Run Turing_Machine. ] in
+ *
+ *
+ *)	
+(*-------------------------------------------------------------------------------------------------------------------------*)	
+
+let (t1Q1: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;C] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg	
+
+let (t2Q1: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;Z;U;Z;O;Z;U;C;U;O;U;Z;O;Z;C;Z;C;Z;C] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg
+	  
+let (t3Q1: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [U;Z;U;Z;O;Z;U;Z;U;O;U;Z;U;Z;C;Z;C;Z;U] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg
+	    
+let (t4Q1: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [U;Z;U;Z;O;Z;U;Z;U;O;U;Z;U;Z;C;Z;B;B;B] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg
+	    	
+(*-------------------------------------------------------------------------------------------------------------------------*)	
+	
+let (t1Q2: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;Z;U;X;Z;U;Z;U;Z;U;Z;X;U;Z;U;Z;U;Z;C] 
+	and band2 = Band.make alphabet [O;Z;U;Z;C;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.good_remplacement ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg	
+
+let (t2Q2: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [X;O;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;C;U;Z;U;X] 
+	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.good_remplacement ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg
+	  
+let (t3Q2: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;Z;U;Z;U;Z;X;X;U;Z;U;Z;U;Z;U;Z;U;Z;C] 
+	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.good_remplacement ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg
+	    	
+(*-------------------------------------------------------------------------------------------------------------------------*)	
+
+let (t1Q3: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;L;X;S;U;U;X;U;U;X;U;U;X;C;O;Z;Z;Z;C] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question3 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O2 ; Run Turing_Machine.good_parenthesis2 ; Run Turing_Machine.go_first_O3 ; Run Turing_Machine.good_parenthesis3 ; Run Turing_Machine.go_left ; Run Turing_Machine.good_remplacement (*; Run Turing_Machine.sub*) ] in
+	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg	
+(*
+let (t2Q3: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [X;O;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;C;U;Z;U;X] 
+	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+
+	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg
+	  
+let (t3Q3: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;Z;U;Z;U;Z;X;X;U;Z;U;Z;U;Z;U;Z;U;Z;C] 
+	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+
+	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ] in
+	    Execution.log_run cfg
+*)	    	
+(*-------------------------------------------------------------------------------------------------------------------------*)	
+	
+	
 
 (* DEMO *)
 	        
@@ -96,17 +209,46 @@ let (demo: unit -> unit) = fun () ->
       begin
 	print_string "\n\n* DEMO * Demo.ml:\n\n" ;
 	List.iter (fun _ -> ())
-	  [ incr ()  ;
-	    decr1 () ;
-	    decr2 () ;    
-	    incr_decr () ;
-	    gen_dup () ;
-	    gen_copy () ;    
-	    gen_reverse () ;
-	    gen_swap () ;
-	    xor () ;
-	    busy_beaver Turing_Machine.bb4
-           (* 
+	  [ 
+	  (* incr () ;
+	   * decr1 () ;
+	   * decr2 () ;    
+	   * incr_decr () ;
+	   * gen_dup () ;
+	   * gen_copy () ;    
+	   * gen_reverse () ;
+	   * gen_swap () ;
+	   * xor () ;
+	   * gr2 ()
+	   * gp Turing_Machine.cpy_Bone_Bthree
+	   *)
+	   
+	  (*My tests *)
+	  
+	  (*Tests Q1
+	   *
+	   * t1Q1 () ;
+	   * t2Q1 () ;
+	   * t3Q1 () 
+	   *)
+
+	  (*Tests Q2
+	   *On remplace toujours la variable X
+	   *
+	   * t1Q2 () ;
+	   * t2Q2 () ;
+	   * t3Q2 ()
+	   *)
+
+	  (*Tests Q3
+	   *
+	   * t1Q3 () ;
+	   * t2Q3 () ;
+	   * t3Q3 () ;
+	   *)
+
+
+           (* busy_beaver Turing_Machine.bb4
 	    * /!\  TERMINATING BUT EXTREMLY LONG COMPUTATIONS ... The sun will be dead before the end of BB6.
 	    *
 	      busy_beaver Turing_Machine.bb5 ;    
