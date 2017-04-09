@@ -1,0 +1,15 @@
+#load_rec "main.cmo";;
+
+
+open Alphabet;;
+open Band;;
+let alphabet = Alphabet.make [B;Z;U]  ;;
+let band = Band.make alphabet [U;U;Z;U] ;;
+let band2 = Band.make alphabet [B;B;Z;U] ;;
+let encode = Binary.build_encoding alphabet ;;
+  
+Binary.encode_band encode band ;;
+let code = Binary.encode_with encode [band; band2];;
+let decode = Binary.decode_with encode code ;;
+[band,band2];;
+Binary.decode_with encode (Binary.encode_with encode [band;band2]);;

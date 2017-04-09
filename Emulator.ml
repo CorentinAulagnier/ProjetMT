@@ -1,4 +1,4 @@
-(* MichaÃ¯Â¿Â½l PÃ¯Â¿Â½RIN, Verimag / UniversitÃ¯Â¿Â½ Grenoble-Alpes, FÃ¯Â¿Â½vrier 2017
+(* Michaï¿½l Pï¿½RIN, Verimag / Universitï¿½ Grenoble-Alpes, Fï¿½vrier 2017
  *
  * Part of the project TURING MACHINES FOR REAL
  *
@@ -20,7 +20,7 @@ open Band
 open Configuration
 open Turing_Machine
 open Execution
-
+open Bit_Vector
 
 
 type emulator   = State.t * Action.t * State.t -> Turing_Machine.t
@@ -140,6 +140,7 @@ open Action
 open Band
 open Transition
 open Turing_Machine
+open Bit_Vector
 
 (* An example of a useless but correct translation that splits the effect of a transition into three steps
 
@@ -230,31 +231,166 @@ struct
   (** NEW 27/03/2107 *)
   type encoding = (Symbol.t * Bits.t) list
 
-  (** NEW 27/03/2107 *)
+  (** Modifié le 06/04/2107 *)
 
+	(*Fonction d'incrémentation d'entier*)
+	let incr : int -> int
+	= fun x -> x+1 
+ 
+	let rec aG : Bit.t -> Bits.t -> Bits.t 
+	= fun a ax ->
+		match ax with
+		| [] -> [a]
+		| x::xs -> x::(aG a xs)
+
+	(*Fonction complément de bits à zero pour des codes binaires de meme taille*)
+	let rec compl : int -> Bits.t -> Bits.t 
+	= fun i bit ->
+			match i with
+  	| 0 -> bit
+  	| i -> compl (i-1) (aG Bit.zero bit)
+	
+		
+	(*Nombre de bits pour écrire i en binaire*)
+	let rec nBits : int -> int 
+	= fun i -> 
+	match i with
+	| 0 -> 1
+	| 1 -> 1
+	| i -> 1 + nBits (i/2)
+
+	(*Codage d'une liste de symboles d'alphabet, de meme taille que nb en binaire *)
+  let rec code : symbols -> int -> int -> encoding
+	= fun alphabet i nb ->
+						match alphabet with
+						| [] -> []
+						| [x] -> (x , ( compl ((nBits nb)-(nBits i)) (Bits.int_to_bits i) ) )::(code [] (incr i) nb ) 
+  					| x::xs -> (x , ( compl ((nBits nb)-(nBits i)) (Bits.int_to_bits i) ) )::(code xs (incr i) nb )
+
+	(*fonction associant un symbole à un code binaire*)
   let build_encoding : Alphabet.t -> encoding
-  (* PROJET 2017: modifiez ce code -> *)
-    = fun alphabet ->
-      let symbol_to_bits : Symbol.t -> Bits.t
-        = fun symbol -> [ Bit.zero ; Bit.unit ]
-      in
-      List.map (fun symbol -> (symbol, symbol_to_bits symbol)) alphabet.symbols
-
-
-  (** MODIFIED 27/03/2107 *)
-  let encode_with : encoding -> Band.t list -> Band.t list
-  (* PROJET 2017: modifiez ce code -> *)
-    = fun encoding ->
-      (fun bands -> bands)
+    = fun alphabet -> 
+  				let nb = alphabet.symbol_size_in_bits in
+						code alphabet.symbols 0 nb				
+	
+	(*trouve le coda associé au symbole*)
+	let rec associated_symbol : Symbol.t -> encoding -> Bits.t
+	=fun symb code ->
+		match fst (List.hd code) with
+		| v -> if (v = symb) then snd (List.hd code) else associated_symbol symb (List.tl code)
+	
+		(*change un symbole en sa traduction en bits *)
+	let rec bits_in_symbols_list: (Symbol.t list) -> Bits.t ->  (Symbol.t list)
+	= fun sym bit ->
+  		match bit with
+			| [] -> sym
+  		| D::next -> (bits_in_symbols_list (D::sym) (List.tl bit )) 
+			| B::next -> (bits_in_symbols_list (B::sym) (List.tl bit )) 
+	
+	(*change une liste de symbole en une liste de leur traduction en bits *)
+	let rec replaceBand : Symbol.t list -> encoding -> Bits.t list
+	=fun sym code ->
+		match sym with
+		| [] -> []
+		| x::xs -> (associated_symbol x code)::(replaceBand xs code)
+	
+	(*change une liste de bits en liste de symbols *)
+	let rec bitBand_to_Band : Bits.t list -> Symbol.t list
+	=fun bits ->
+		match bits with
+  	| [] -> []
+  	| x :: xs -> bits_in_symbols_list (bitBand_to_Band xs) x
+	
+	(*traduit une bande de symbols normaux en bande de symbols de {B,D} *)
+	let encode_band : encoding -> Band.t -> Band.t
+	 = fun coding band ->
+  	let newband : Band.t =  
+  			{
+  			color = ( band.color ) ;
+  			alphabet = {symbols = [B;D]; symbol_size_in_bits = 1} ;
+  			left = ( bitBand_to_Band (replaceBand band.left coding) );
+  			head = List.hd ( bits_in_symbols_list [] ( associated_symbol band.head coding ) );
+  			right = bits_in_symbols_list ( bitBand_to_Band (replaceBand band.right coding) ) (List.tl (bits_in_symbols_list [] ( associated_symbol band.head coding ))) ;
+  		} in
+  		newband
+	
+  (** MODIFIED 06/04/2107 *)
+	(*traduit la liste de bandes de symbols normaux en bande de symbols de {B,D} *)
+  let rec encode_with : encoding -> Band.t list -> Band.t list
+    = fun coding bands ->
+				match bands with
+				| [] -> []
+				| x::xs->  (encode_band coding x )::(encode_with coding xs)
+				
+      
 
 
   (* REVERSE TRANSLATION *)
-
+	
+	(*change une liste de bits sous forme de symboles en bits *)
+	let rec decode_bits : int -> Symbol.t list -> Bits.t
+	=fun nBits decode ->
+		match nBits with
+		| 0 -> []
+		| nBits -> (match decode with
+									| B::xs -> aG Bit.zero (decode_bits (nBits-1) xs)  
+									| D::xs -> aG Bit.unit (decode_bits (nBits-1) xs)  )
+		
+		(*décale la liste de symbole du nombre de décalage donnés*)
+		let rec decale_list : int -> Symbol.t list -> Symbol.t list
+		=fun nb sym ->
+			match nb with
+			| 0 -> sym
+			| nb -> (match sym with
+									| [] ->[]
+									| x::xs -> decale_list (nb-1) xs)
+							
+	(*renvoi le symbol associé au bits*)
+	let rec associated_Bits :  Bits.t -> encoding -> Symbol.t
+	=fun bits -> fun code ->
+		match snd (List.hd code) with
+		| b -> if (b=bits) then fst (List.hd code) else associated_Bits bits (List.tl code)
+	
+	(*change une liste de bits sous forme de symbole en une liste de symboles correspondant*)
+	let rec symbit_to_bits : int -> encoding -> Symbol.t list -> Symbol.t list
+	= fun nBits decode sym ->
+		match sym with
+		| [] -> []
+		| sym -> (associated_Bits (decode_bits nBits sym) decode )::(symbit_to_bits nBits decode (decale_list nBits sym))
+	
+	(*nombre de bits de bits*)
+	let rec nombreMaxBits: Bits.t -> int
+	=fun bits ->
+		match bits with
+		| []-> 0
+		| x::xs -> 1 + nombreMaxBits xs
+		
+	
+		let rec symblist : (Symbol.t*Bits.t) -> Symbol.t
+		=fun (s,b) -> s
+		
+	(*decodage d'une bande de bits sous forme de symboles en bande de symbole*)
+	let decode_band : encoding -> Band.t -> Band.t
+	 = fun coding band ->
+		let nBitsMax = nombreMaxBits (snd (List.hd coding))  in (*TODO*)
+  	let newband : Band.t =  
+  			{
+  			color = ( band.color ) ;
+  			alphabet = {symbols = (List.map symblist coding) ; symbol_size_in_bits = nBitsMax} ;
+  			left = symbit_to_bits nBitsMax coding band.left;
+  			head = List.hd (symbit_to_bits nBitsMax coding (band.head::band.right));
+  			right =List.tl (symbit_to_bits nBitsMax coding (band.head::band.right));
+  		} in
+  		newband
+			
   (** MODIFIED 27/03/2107 *)
-  let decode_with : encoding -> Band.t list -> Band.t list
+	(*decodage de bandes de bits sous forme de symboles en bandes de symbole*)
+  let rec decode_with : encoding -> Band.t list -> Band.t list
   (* PROJET 2017: modifiez ce code -> *)
-    = fun encoding ->
-      (fun bands -> bands)
+    = fun coding bands ->
+				match bands with
+				| [] -> []
+				| x::xs->  (decode_band coding x )::(decode_with coding xs)
 
 
   (* EMULATION OF TRANSITIONS *)
@@ -299,4 +435,3 @@ let (demo: unit -> unit) = fun () ->
       ],[])
       cfg
   in ()
-
