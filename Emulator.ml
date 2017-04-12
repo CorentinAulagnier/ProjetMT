@@ -1,4 +1,4 @@
-(* Michaï¿½l Pï¿½RIN, Verimag / Universitï¿½ Grenoble-Alpes, Fï¿½vrier 2017
+(* MichaÃ¯el PÃ¯eRIN, Verimag / UniversitÃ¯e Grenoble-Alpes, FÃ¯evrier 2017
  *
  * Part of the project TURING MACHINES FOR REAL
  *
@@ -231,9 +231,9 @@ struct
   (** NEW 27/03/2107 *)
   type encoding = (Symbol.t * Bits.t) list
 
-  (** Modifié le 06/04/2107 *)
+  (** Modifie le 06/04/2107 *)
 
-	(*Fonction d'incrémentation d'entier*)
+	(*Fonction d'incrementation d'entier*)
 	let incr : int -> int
 	= fun x -> x+1 
  
@@ -243,7 +243,7 @@ struct
 		| [] -> [a]
 		| x::xs -> x::(aG a xs)
 
-	(*Fonction complément de bits à zero pour des codes binaires de meme taille*)
+	(*Fonction complement de bits a zero pour des codes binaires de meme taille*)
 	let rec compl : int -> Bits.t -> Bits.t 
 	= fun i bit ->
 			match i with
@@ -251,7 +251,7 @@ struct
   	| i -> compl (i-1) (aG Bit.zero bit)
 	
 		
-	(*Nombre de bits pour écrire i en binaire*)
+	(*Nombre de bits pour ecrire i en binaire*)
 	let rec nBits : int -> int 
 	= fun i -> 
 	match i with
@@ -267,13 +267,13 @@ struct
 						| [x] -> (x , ( compl ((nBits nb)-(nBits i)) (Bits.int_to_bits i) ) )::(code [] (incr i) nb ) 
   					| x::xs -> (x , ( compl ((nBits nb)-(nBits i)) (Bits.int_to_bits i) ) )::(code xs (incr i) nb )
 
-	(*fonction associant un symbole à un code binaire*)
+	(*fonction associant un symbole a un code binaire*)
   let build_encoding : Alphabet.t -> encoding
     = fun alphabet -> 
   				let nb = alphabet.symbol_size_in_bits in
 						code alphabet.symbols 0 nb				
 	
-	(*trouve le coda associé au symbole*)
+	(*trouve le coda associe au symbole*)
 	let rec associated_symbol : Symbol.t -> encoding -> Bits.t
 	=fun symb code ->
 		match fst (List.hd code) with
@@ -336,7 +336,7 @@ struct
 									| B::xs -> aG Bit.zero (decode_bits (nBits-1) xs)  
 									| D::xs -> aG Bit.unit (decode_bits (nBits-1) xs)  )
 		
-		(*décale la liste de symbole du nombre de décalage donnés*)
+		(*decale la liste de symbole du nombre de decalage donnes*)
 		let rec decale_list : int -> Symbol.t list -> Symbol.t list
 		=fun nb sym ->
 			match nb with
@@ -345,7 +345,7 @@ struct
 									| [] ->[]
 									| x::xs -> decale_list (nb-1) xs)
 							
-	(*renvoi le symbol associé au bits*)
+	(*renvoi le symbol associe au bits*)
 	let rec associated_Bits :  Bits.t -> encoding -> Symbol.t
 	=fun bits -> fun code ->
 		match snd (List.hd code) with
