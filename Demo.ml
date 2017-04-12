@@ -90,7 +90,7 @@ let (busy_beaver: Turing_Machine.t -> Configuration.t) = fun bb ->
 	  let cfg = Configuration.make bb [ band ] in
 	    Execution.log_run cfg 
 
-(*Test Partie2 projet : B-Reduction *)
+(** Test Partie2 projet : B-Reduction *)
 
 (* MT à utiliser
  *
@@ -101,57 +101,154 @@ let (busy_beaver: Turing_Machine.t -> Configuration.t) = fun bb ->
  * let question3 = Turing_Machine.sequence [ Run Turing_Machine. ; Run Turing_Machine. ] in
  *
  *
+ * Demo.q1t11();;
+ *
  *)	
 (*-------------------------------------------------------------------------------------------------------------------------*)	
+(*Question 1 *)
 
-let (t1Q1: unit -> Configuration.t) = fun () ->
+(*Cas de base *)
+let (q1t11: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [O;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;C] 
 	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
-	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
-	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
-	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg	
 
-let (t2Q1: unit -> Configuration.t) = fun () ->
+let (q1t12: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;C] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Btwo ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+
+(*Parentheses imbriquées *)
+let (q1t21: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [O;Z;U;Z;O;Z;U;C;U;O;U;Z;O;Z;C;Z;C;Z;C] 
 	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
-	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
-	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
-	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
-	  
-let (t3Q1: unit -> Configuration.t) = fun () ->
+
+let (q1t22: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;Z;U;Z;O;Z;U;C;U;O;U;Z;O;Z;C;Z;C;Z;C] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Btwo ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+
+(*parenthese pas au debut *) 
+let (q1t31: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [U;Z;U;Z;O;Z;U;Z;U;O;U;Z;U;Z;C;Z;C;Z;U] 
 	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
-	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
-	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
-	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
-	    
-let (t4Q1: unit -> Configuration.t) = fun () ->
+
+let (q1t32: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [U;Z;U;Z;O;Z;U;Z;U;O;U;Z;U;Z;C;Z;C;Z;U] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Btwo ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+
+(*Test error *)	    
+let (q1t41: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [U;Z;U;Z;O;Z;U;Z;U;O;U;Z;U;Z;C;Z;B;B;B] 
 	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
-	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
-	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
-	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ] in
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+
+let (q1t42: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [U;Z;U;Z;O;Z;U;Z;U;O;U;Z;U;Z;C;Z;B;B;B] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Btwo ] in
+	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
 	    	
-(*-------------------------------------------------------------------------------------------------------------------------*)	
-	
-let (t1Q2: unit -> Configuration.t) = fun () ->
+(*-------------------------------------------------------------------------------------------------------------------------*)
+(*Presente *)
+let (q2t1: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
-	let band1 = Band.make alphabet [O;Z;U;X;Z;U;Z;U;Z;U;Z;X;U;Z;U;Z;U;Z;C] 
-	and band2 = Band.make alphabet [O;Z;U;Z;C;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
-	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
-	let question2 = Turing_Machine.sequence [ Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.good_remplacement ] in
-	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ] in
-	    Execution.log_run cfg	
+	let band1 = Band.make alphabet [O;X;U;X;Z;X;Z;U;X;U;C;B;B;B;B;B;B;B;B] 
+	and band2 = Band.make alphabet [O;X;U;Z;C;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;X;U;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.sub ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
 
-let (t2Q2: unit -> Configuration.t) = fun () ->
+(*Variable plus longue presente *)
+let (q2t2: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;X;U;X;Z;X;Z;U;X;U;Z;C;B;B;B;B;B;B;B] 
+	and band2 = Band.make alphabet [O;X;U;Z;C;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;X;U;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.sub ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+
+(*Seul variable presente *)
+let (q2t3: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;X;U;X;U;X;U;X;U;X;U;C;B;B;B;B;B;B;B] 
+	and band2 = Band.make alphabet [O;X;U;Z;C;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;X;U;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.sub ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+
+(*Var plus courte presente *)
+let (q2t4: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;X;U;X;Z;X;Z;U;X;U;Z;C;B;B;B;B;B;B;B] 
+	and band2 = Band.make alphabet [O;X;U;Z;C;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;X;U;Z;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.sub ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+
+(*Variable non présente *)
+let (q2t5: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S] in
+	let band1 = Band.make alphabet [O;X;U;Z;X;Z;X;Z;U;X;U;Z;C;B;B;B;B;B;B] 
+	and band2 = Band.make alphabet [O;X;U;Z;C;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;X;U;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question2 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.sub ] in
+	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+	
+(*
+let (t2q2: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [X;O;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;C;U;Z;U;X] 
 	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
@@ -160,7 +257,7 @@ let (t2Q2: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ] in
 	    Execution.log_run cfg
 	  
-let (t3Q2: unit -> Configuration.t) = fun () ->
+let (t3q2: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [O;Z;U;Z;U;Z;X;X;U;Z;U;Z;U;Z;U;Z;U;Z;C] 
 	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
@@ -169,9 +266,9 @@ let (t3Q2: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ] in
 	    Execution.log_run cfg
 	    	
-(*-------------------------------------------------------------------------------------------------------------------------*)	
+-------------------------------------------------------------------------------------------------------------------------
 
-let (t1Q3: unit -> Configuration.t) = fun () ->
+let (t1q3: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [O;L;X;S;U;U;X;U;U;X;U;U;X;C;O;Z;Z;Z;C] 
 	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
@@ -181,7 +278,7 @@ let (t1Q3: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg	
 (*
-let (t2Q3: unit -> Configuration.t) = fun () ->
+let (t2q3: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [X;O;U;Z;U;Z;U;Z;U;Z;U;Z;U;Z;C;U;Z;U;X] 
 	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
@@ -190,7 +287,7 @@ let (t2Q3: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ] in
 	    Execution.log_run cfg
 	  
-let (t3Q3: unit -> Configuration.t) = fun () ->
+let (t3q3: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S] in
 	let band1 = Band.make alphabet [O;Z;U;Z;U;Z;X;X;U;Z;U;Z;U;Z;U;Z;U;Z;C] 
 	and band2 = Band.make alphabet [B;B;B;B;O;Z;U;C;B;B;B;B;B;B;B;B;B;B;B] 
@@ -198,8 +295,8 @@ let (t3Q3: unit -> Configuration.t) = fun () ->
 
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ] in
 	    Execution.log_run cfg
-*)	    	
-(*-------------------------------------------------------------------------------------------------------------------------*)	
+*)
+-------------------------------------------------------------------------------------------------------------------------*)	
 	
 	
 
@@ -227,24 +324,24 @@ let (demo: unit -> unit) = fun () ->
 	  
 	  (*Tests Q1
 	   *
-	   * t1Q1 () ;
-	   * t2Q1 () ;
-	   * t3Q1 () 
+	   * t1q1 () ;
+	   * t2q1 () ;
+	   * t3q1 () 
 	   *)
 
 	  (*Tests Q2
 	   *On remplace toujours la variable X
 	   *
-	   * t1Q2 () ;
-	   * t2Q2 () ;
-	   * t3Q2 ()
+	   * t1q2 () ;
+	   * t2q2 () ;
+	   * t3q2 ()
 	   *)
 
 	  (*Tests Q3
 	   *
-	   * t1Q3 () ;
-	   * t2Q3 () ;
-	   * t3Q3 () ;
+	   * t1q3 () ;
+	   * t2q3 () ;
+	   * t3q3 () ;
 	   *)
 
 

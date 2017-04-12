@@ -354,86 +354,155 @@ module Turing_Machine =
 
     (* THREE BANDS TURING MACHINES *)
 
-(* Q1 *) 
+(** Q1 *) 
 
     let (go_first_O:turing_machine) = 
       let init = nop.initial and accept = nop.accept and reject = State.reject in
 	let q = State.fresh_from init in	          	  
 	  { nop with
-	    nb_bands = 3 ;
+	    nb_bands = 4 ;
 	    name = "go_first_O" ;
 	    transitions =
 	    [
-	     (*On avance jusqu'à la 1er O *)
-	     (init, Action( Simultaneous [ RWM (Match (BUT O), No_Write, Right) ; RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match (VAL O), No_Write, Right) ; RWM (Match ANY, Write O, Right) ; RWM (Match ANY, Write S, Here) ]), accept) ;
+	     (*On avance jusqu'à la 1er O et reste dessus*)
+	     (init, Action( Simultaneous [ RWM (Match (BUT O), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match (VAL O), No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write S, Here) ]), accept)
 	   ]
 	  } 
 	 
-	  
-    let (good_parenthesis:turing_machine) = 
+	
+
+   let (cpy_Bone_Btwo:turing_machine) = 
       let init = nop.initial and accept = nop.accept and reject = State.reject in
 	let q = State.fresh_from init in	          	  
 	  { nop with
-	    nb_bands = 3 ;
-	    name = "good_parenthesis" ;
+	    nb_bands = 4 ;
+	    name = "cpy_Bone_Btwo" ;
 	    transitions =
 	    [
 	     (*On avance *)
-	     (init, Action( Simultaneous [ RWM (Match(VAL S), No_Write, Right) ; RWM (Match ANY, Write S, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ; 
-	     (init, Action( Simultaneous [ RWM (Match(VAL X), No_Write, Right) ; RWM (Match ANY, Write X, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL L), No_Write, Right) ; RWM (Match ANY, Write L, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL U), No_Write, Right) ; RWM (Match ANY, Write U, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL Z), No_Write, Right) ; RWM (Match ANY, Write Z, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
-	     
-	     (*Parenthese O interne *)
-	     (*Belle Pile*)
-	     (init, Action( Simultaneous [ RWM (Match(VAL O), No_Write, Right) ; RWM (Match ANY, Write O, Right) ; RWM (Match ANY, No_Write, Right) ]), Q 2) ; (*Parenthese O interne *)
-	     (Q 2, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write O, Here) ]), init) ;
-		(*Sans Pile*)(*
-	     (init, Action( Simultaneous [ RWM (Match(VAL O), No_Write, Right) ; RWM (Match ANY, Write O, Right) ; RWM (Match ANY, No_Write, Right) ]), init) ; *)
-	     
-	     (*Parenthese C interne *)
-	     (init, Action( Simultaneous [ RWM (Match(VAL C), No_Write, Right) ; RWM (Match ANY, Write C, Right) ; RWM (Match (BUT S), Write B, Left) ]), init) ;
-	     
-	     (*Fin du terme *)
-	     (init, Action( Simultaneous [ RWM (Match(VAL C), No_Write, Here) ; RWM (Match ANY, Write C, Here) ; RWM (Match (VAL S), Write B, Here) ]), accept) ;
-	      
+	     (init, Action( Simultaneous [ RWM (Match(VAL S), No_Write, Right) ; RWM (Match ANY, Write S, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL X), No_Write, Right) ; RWM (Match ANY, Write X, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL L), No_Write, Right) ; RWM (Match ANY, Write L, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL U), No_Write, Right) ; RWM (Match ANY, Write U, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL Z), No_Write, Right) ; RWM (Match ANY, Write Z, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+
 	     (*Erreur *)
-	     (init, Action( Simultaneous [ RWM (Match(VAL B), No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), reject)
+	     (init, Action( Simultaneous [ RWM (Match(VAL B), No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), reject) ;
+
+	     (*On empile*)
+	     (init, Action( Simultaneous [ RWM (Match(VAL O), No_Write, Right) ; RWM (Match ANY, Write O, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Right) ]), init) ;
+
+	     (*On trouve une fermante *)
+	     (init, Action( Simultaneous [ RWM (Match(VAL C), No_Write, Here) ; RWM (Match ANY, Write C, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match (BUT S), No_Write, Left) ]), Q 2) ;
+	     (Q 2, Action( Simultaneous [ RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match (BUT S), No_Write, Here) ]), init) ;
+	     (Q 2, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match (VAL S), Write B, Here) ]), accept) 
+
 	   ]
 	  }
-	
-(* Q2 *)
+  
 
-    let (goto_left_blank:  turing_machine) = find_symbol_on_the B Left
- 
-	
-    let (cpy_Bone_Bthree:turing_machine) = 
+
+   let (cpy_Bone_Bthree:turing_machine) = 
       let init = nop.initial and accept = nop.accept and reject = State.reject in
 	let q = State.fresh_from init in	          	  
 	  { nop with
-	    nb_bands = 3 ;
+	    nb_bands = 4 ;
 	    name = "cpy_Bone_Bthree" ;
 	    transitions =
 	    [
 	     (*On avance *)
-	     (init, Action( Simultaneous [ RWM (Match(VAL S), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write S, Right) ]), init) ; 
-	     (init, Action( Simultaneous [ RWM (Match(VAL C), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write C, Right) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL X), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write X, Right) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL O), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write O, Right) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL L), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write L, Right) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL U), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write U, Right) ]), init) ;
-	     (init, Action( Simultaneous [ RWM (Match(VAL Z), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write Z, Right) ]), init) ;
-	     
-	     (*On a fini en trouvant un B *)
-	     (init, Action( Simultaneous [ RWM (Match(VAL B), No_Write, Left) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Left) ]), Q 2) ;
-	     (Q 2, Parallel [ Run(goto_left_blank) ; Run(goto_left_blank) ; Run(goto_left_blank) ], Q 3) ;
-	     (Q 3, Action( Simultaneous [ RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Right) ]), accept) 
+	     (init, Action( Simultaneous [ RWM (Match(VAL S), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write S, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL X), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write X, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL L), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write L, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL U), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write U, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+	     (init, Action( Simultaneous [ RWM (Match(VAL Z), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write Z, Right) ; RWM (Match ANY, No_Write, Here) ]), init) ;
+
+	     (*Erreur *)
+	     (init, Action( Simultaneous [ RWM (Match(VAL B), No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ]), reject) ;
+
+	     (*On empile*)
+	     (init, Action( Simultaneous [ RWM (Match(VAL O), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write O, Right) ; RWM (Match ANY, No_Write, Right) ]), init) ;
+
+	     (*On trouve une fermante *)
+	     (init, Action( Simultaneous [ RWM (Match(VAL C), No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, Write C, Here) ; RWM (Match (BUT S), No_Write, Left) ]), Q 2) ;
+	     (Q 2, Action( Simultaneous [ RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Right) ; RWM (Match (BUT S), No_Write, Here) ]), init) ;
+	     (Q 2, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match (VAL S), Write B, Here) ]), accept) 
+
 	   ]
-	  }	
+	  }
 
+(*-----------------------------------------------------------------------------------------------------------------------*)
+(** Q2 *)
 
+    let (goto_left_blank:  turing_machine) = find_symbol_on_the B Left
+    let (goto_left_X:  turing_machine) = find_symbol_on_the X Left
+
+    let (sub:turing_machine) = 
+      let init = nop.initial and accept = nop.accept and reject = nop.reject in
+	let q = State.fresh_from init in	          	  
+	  { nop with
+	    nb_bands = 4 ;
+	    name = "sub" ;
+	    transitions =
+	    [ 
+	     (*Initialisation au 1er char *)
+	     (init, Parallel [ Run(goto_left_blank) ; Run(goto_left_blank) ; Run(goto_left_blank) ; Run(goto_left_blank) ], Q 2) ;
+	     (Q 2, Action( Simultaneous [ RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Right) ]), Q 3) ;
+	     
+	     (*Debut Travail *)
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, Write Z, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL Z), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, Write U, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL U), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, Write S, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL S), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, Write C, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL C), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, Write O, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL O), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, Write L, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL L), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL B), No_Write, Left) ; RWM (Match ANY, No_Write, Here)]), accept) ;
+
+	     (Q 3, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL X), No_Write, Right) ; RWM (Match (VAL X), No_Write, Right)]), Q 4) ;
+
+	     (*Match X =? var *)
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL U), No_Write, Right) ; RWM (Match (VAL U), No_Write, Right)]), Q 4) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL Z), No_Write, Right) ; RWM (Match (VAL Z), No_Write, Right)]), Q 4) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL X), No_Write, Here) ; RWM (Match (VAL B), No_Write, Left)]), Q 5) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL C), No_Write, Here) ; RWM (Match (VAL B), No_Write, Left)]), Q 5) ;
+
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL U), No_Write, Here) ; RWM (Match (VAL Z), No_Write, Right)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL Z), No_Write, Here) ; RWM (Match (VAL U), No_Write, Right)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL X), No_Write, Left) ; RWM (Match (VAL Z), No_Write, Right)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL X), No_Write, Left) ; RWM (Match (VAL U), No_Write, Right)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL O), No_Write, Here) ; RWM (Match (VAL B), No_Write, Left)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL S), No_Write, Here) ; RWM (Match (VAL B), No_Write, Left)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL L), No_Write, Here) ; RWM (Match (VAL B), No_Write, Left)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL U), No_Write, Here) ; RWM (Match (VAL B), No_Write, Left)]), Q 6) ;
+	     (Q 4, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL Z), No_Write, Here) ; RWM (Match (VAL B), No_Write, Left)]), Q 6) ;
+
+	     (*Gagné *)(*[B;Z;U;L;O;C;X;S]*)
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, Write Z, Right) ; RWM (Match(VAL Z), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 5) ;
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, Write U, Right) ; RWM (Match(VAL U), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 5) ;
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, Write S, Right) ; RWM (Match(VAL S), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 5) ;
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, Write C, Right) ; RWM (Match(VAL C), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 5) ;
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, Write O, Right) ; RWM (Match(VAL O), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 5) ;
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, Write L, Right) ; RWM (Match(VAL L), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 5) ;
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, Write X, Right) ; RWM (Match(VAL X), No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 5) ;
+
+	     (Q 5, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL B), No_Write, Left) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 9) ;
+
+	     (Q 9, Parallel [ Run(nop) ; Run(goto_left_blank) ; Run(nop) ; Run(goto_left_X) ], Q 10) ;
+	     (Q 10, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+
+	     (*Perdu *)
+	     (Q 6, Parallel [ Run(nop) ; Run(goto_left_blank) ; Run(goto_left_X) ; Run(goto_left_X) ], Q 7) ;
+	     (Q 7, Action( Simultaneous [ RWM (Match ANY, Write X, Right) ; RWM (Match ANY, No_Write, Right) ; RWM (Match(VAL X), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 8) ;
+	     (Q 8, Action( Simultaneous [ RWM (Match ANY, Write Z, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL Z), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 8) ;
+	     (Q 8, Action( Simultaneous [ RWM (Match ANY, Write U, Right) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL U), No_Write, Right) ; RWM (Match ANY, No_Write, Here)]), Q 8) ;
+	     (Q 8, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL X), No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 3) ;
+	     (Q 8, Action( Simultaneous [ RWM (Match ANY, No_Write, Here) ; RWM (Match ANY, No_Write, Here) ; RWM (Match(VAL C), No_Write, Here) ; RWM (Match ANY, No_Write, Here)]), Q 3)
+	   ]
+	  }
+ 
+(*
     let (good_remplacement:turing_machine) = 
       let init = nop.initial and accept = nop.accept and reject = nop.reject in
 	let q = State.fresh_from init in	          	  
@@ -479,10 +548,10 @@ module Turing_Machine =
 	     (Q 5, Parallel [ Run(goto_left_blank) ; Run(goto_left_blank) ; Run(goto_left_blank) ], accept)
 	   ]
 	  }
-	
-	
-(* Q3 *)
-
+*)	
+(*-----------------------------------------------------------------------------------------------------------------------*)
+(** Q3 *)
+(*
     let (good_parenthesis2:turing_machine) = 
       let init = nop.initial and accept = nop.accept and reject = State.reject in
 	let q = State.fresh_from init in	          	  
@@ -608,7 +677,7 @@ module Turing_Machine =
 
 
 
-
+*)
 
 
 
@@ -629,7 +698,8 @@ module Turing_Machine =
 	  }
 
 
-*)	  
+*)
+(* *)	  
 (* Q1 -> init; Q0 -> accept; Q-1 -> reject*)
 (*[B;Z;U;L;O;C;X;S]*)
 (*Ligne172 LC BY MT , longue fonction a écrire*)
