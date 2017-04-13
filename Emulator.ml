@@ -334,7 +334,8 @@ struct
 		| 0 -> []
 		| nBits -> (match decode with
 									| B::xs -> aG Bit.zero (decode_bits (nBits-1) xs)  
-									| D::xs -> aG Bit.unit (decode_bits (nBits-1) xs)  )
+									| D::xs -> aG Bit.unit (decode_bits (nBits-1) xs) 
+								)
 		
 		(*decale la liste de symbole du nombre de decalage donnes*)
 		let rec decale_list : int -> Symbol.t list -> Symbol.t list
@@ -541,8 +542,7 @@ struct
                 | Simultaneous(listeAction) -> actionSimultane listeAction encoding 
                 | Nop -> []
 								)
-			|	x::xs -> (actionSimultane [x] encoding ) @ (actionSimultane xs encoding)
-		
+			|	x::xs -> (actionSimultane [x] encoding ) @ (actionSimultane xs encoding)		
 
 	let rec makeTransitions : State.t -> instruction list -> State.t -> transitions
 	= fun src inst trgt ->

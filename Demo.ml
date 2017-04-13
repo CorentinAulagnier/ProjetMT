@@ -1,4 +1,4 @@
-(* Michaël PÉRIN, Verimag / Université Grenoble-Alpes, Février 2017 
+(* MichaÃ«l PÃ‰RIN, Verimag / UniversitÃ© Grenoble-Alpes, FÃ©vrier 2017 
  *
  * Part of the project TURING MACHINES FOR REAL
  *
@@ -92,7 +92,7 @@ let (busy_beaver: Turing_Machine.t -> Configuration.t) = fun bb ->
 
 (** Test Partie2 projet : B-Reduction *)
 
-(* MT à utiliser
+(* MT Ã  utiliser
  *
  * let question1 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.good_parenthesis ] in
  *
@@ -128,7 +128,7 @@ let (q1t12: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question1 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
 
-(*Parentheses imbriquées *)
+(*Parentheses imbriquÃ©es *)
 let (q1t21: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;Z;U;Z;O;Z;U;C;U;O;U;Z;O;Z;C;Z;C;Z;C] 
@@ -238,7 +238,7 @@ let (q2t4: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question2 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
 
-(*Variable non présente *)
+(*Variable non prÃ©sente *)
 let (q2t5: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;X;U;Z;X;Z;X;Z;U;X;U;Z;C;B;B;B;B;B;B] 
@@ -309,7 +309,7 @@ let (q5t1: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
 
-(*Nom présent *)
+(*Nom prÃ©sent *)
 let (q5t2: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;L;X;U;O;X;Z;U;Z;X;Z;X;Z;Z;X;U;Z;C;C;O;X;U;U;U;U;C;B;B;B] 
@@ -343,7 +343,7 @@ let (codage: unit -> Configuration.t) = fun () ->
 
 *)
 
-(*Présent plusieurs fois *)
+(*PrÃ©sent plusieurs fois *)
 let (q5t3: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;L;X;U;O;X;U;X;Z;X;Z;Z;X;U;X;U;C;C;O;X;U;U;U;U;C;B;B;B;B] 
@@ -367,8 +367,18 @@ let (q5t4: unit -> Configuration.t) = fun () ->
 
 
 (*-------------------------------------------------------------------------------------------------------------------------*)
-
-	
+(*Simulation de mt traduite en binaire*)
+let (q5Sim: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
+			let code = Binary.build_encoding alphabet in
+	let band1 = Band.make alphabet [O;L;X;U;O;X;U;X;U;X;U;X;U;X;U;C;C;O;X;Z;C;B;B;B;B;B;B;B;B] 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question3 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Btwo ; Run Turing_Machine.reduc ; Run Turing_Machine.sub ] in
+	  let question3_trans = Binary.turingSimulator question3 code in
+		let cfg = Configuration.make question3_trans (Binary.encode_with code [ band1 ; band2 ; band3 ; band4 ] )in
+	    Execution.log_run cfg
 
 (* DEMO *)
 	        
