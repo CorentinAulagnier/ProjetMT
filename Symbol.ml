@@ -67,15 +67,15 @@ module Symbol =
     let rec (to_ascii: symbol -> string) =
       function
 	| B -> "_"
-	| U -> "U"
-	| Z -> "Z"
+	| U -> "u"
+	| Z -> "z"
 	| D -> "$"
 	| S -> "#"
 		  
 	| L -> "L"	      
 	| O -> "("
 	| C -> ")"
-	| X -> "x"
+	| X -> "X"
 	| V(string,int) -> string ^ (if int<0 then "" else string_of_int int)
 
 	| Vector symbols -> Pretty.parentheses (String.concat "," (List.map to_ascii symbols))

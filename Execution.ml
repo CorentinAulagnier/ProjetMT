@@ -76,7 +76,7 @@ module Execution =
     	<meta charset=utf-8>\n\t\t<title>Projet MT 2017</title>
     	<link rel=\"stylesheet\" href=\"reset.css\" type=\"text/css\">
     	<link rel=\"stylesheet\" href=\"mt.css\" type=\"text/css\" title=\"principal\">\n\t</head>\n\t<body>
-    	<div id=\"wrapper\">\n\t\t<header><h1>Projet MT 2017 : Rendu html</h1></header>\n\t\t<div id=\"demo_contenu\"> 
+    	<div id=\"wrapper\">\n\t\t<header><h1>Projet MT 2017 : Aulagnier Carriere Riou Thisse</h1></header>\n\t\t<div id=\"demo_contenu\"> 
     	<TABLE class=\"band\"><thead><tr><TH class=\"machine\">Machine</TH><TH class=\"state\">Etat</TH><TH class=\"symboles\">Symboles</TH></tr></thead></TABLE>\n\n\n";
 
     	let final_cfg = run (call_depth, cfg.logger::log) cfg in

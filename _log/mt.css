@@ -8,7 +8,13 @@ body{
     height: 100%;      
     font-family:verdana,arial,sans-serif;
     font-size :  1.1em;
-    background-color :  #f9f9f9;
+    background: rgb(190,220,235); /* Old browsers */
+    background: -moz-linear-gradient(-45deg,  rgba(190,220,235,1) 0%, rgba(60,125,210,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg,  rgba(190,220,235,1) 0%,rgba(60,125,210,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(-45deg,  rgba(190,220,235,1) 0%,rgba(60,125,210,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bedbea', endColorstr='#3d7cd3',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 #wrapper {
     position :relative; 
@@ -17,10 +23,6 @@ body{
     min-width:75%; 
     margin-left:auto;
     margin-right :auto; 
-
-    border-left: 4px #e6e6e6;
-    border-right: 4px #e6e6e6;
-    border-style: ridge;
 }   
 /************************************/
 /*      header/footer				*/
@@ -33,12 +35,18 @@ header{
 
 h1{
     padding-top: 20px;
+    font-family: Georgia;
+    font-style: italic;
 }
 
 #demo_contenu{
     width: 100%;
     min-width:100%; 
     padding-bottom: 3em;
+    background-color: #F8F8FF;
+    border-left: 2px #e6e6e6;
+    border-right: 2px #e6e6e6;
+    border-style: ridge;
 }
 
 footer {  
@@ -46,11 +54,16 @@ footer {
     bottom:0px;
     left: 0px;
     right: 0px;
-    height:3em;
+    height:5em;
     min-width:100%; 
     text-align:center;
     font-size: x-small;
-}                      
+    font-variant: small-caps;
+    background-color: transparent;
+}          
+footer p{
+    margin-top:2em;
+}            
 /************************************/
 /*             bands               */
 /************************************/
@@ -70,19 +83,23 @@ thead{
     color: white;
     font-size :  1.1em;   
     border-left: 1px #e6e6e6;
+    border-style: ridge;
+    font-variant: small-caps;
 }
 th{
     height: 3em;
     vertical-align: middle; 
 }
 
-.machine,.state,.pok,.nok,.ok,.symbol,.symboles{
+.machine,.state,.pok,.nok,.ok,.symboles{
     padding: 8px 8px; 
     border-left: 1px #e6e6e6;
     border-style: ridge;
 }
 
-
+.symbol{
+    padding: 8px 8px; 
+}
 .machine,.state,.pok,.nok,.ok,.symbol{
     text-align: center;
     height: 100%;
@@ -96,7 +113,8 @@ th{
     width : 75px;
 }
 .symbol{
-    width : 35px;
+    width : 35px;  
+    font-family: Comic;
 }
 
 tr{
@@ -104,23 +122,42 @@ tr{
     text-align: left;
 }
 
-/*
-.tete_lecture{
-    background-color: #dddddd;
+.U, .Z{
+    color: darkblue;
+    font-weight: bold;
 }
 
-.x{
-
+.L, .parenthese_o, .parenthese_f{
+    color: #B8860B;
+    font-weight: bold;
 }
 
-    | B -> "_"
-    | U -> "U"
-    | Z -> "Z"
-    | D -> "$"
-    | S -> "#"
-          
-    | L -> "L"        
-    | O -> "("
-    | C -> ")"
-    | X -> "x"
-*/
+.diese{
+    color: red; 
+}
+
+.tete_lecture {
+    padding: 8px 8px; 
+   /* background: rgb(190,220,235); 
+    background: -moz-linear-gradient(-45deg,  rgba(190,220,235,1) 0%, rgba(60,125,210,1) 100%); 
+    background: -webkit-linear-gradient(-45deg,  rgba(190,220,235,1) 0%,rgba(60,125,210,1) 100%); 
+    background: linear-gradient(-45deg,  rgba(190,220,235,1) 0%,rgba(60,125,210,1) 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bedbea', endColorstr='#3d7cd3',GradientType=1 );
+    background-repeat: no-repeat;
+    background-attachment: fixed;*/
+
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#404040+0,404040+100&0.65+0,0+100 */
+background: -moz-radial-gradient(center, ellipse cover,  rgba(64,64,64,0.65) 0%, rgba(64,64,64,0) 100%); /* FF3.6-15 */
+background: -webkit-radial-gradient(center, ellipse cover,  rgba(64,64,64,0.65) 0%,rgba(64,64,64,0) 100%); /* Chrome10-25,Safari5.1-6 */
+background: radial-gradient(ellipse at center,  rgba(64,64,64,0.65) 0%,rgba(64,64,64,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6404040', endColorstr='#00404040',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+.tete_lecture .symbol{
+    font-weight: bold;
+    font-style: italic;
+    color: white;
+}
+
+._, .dollar, .tete_lecture ._{
+    color: transparent;
+}
