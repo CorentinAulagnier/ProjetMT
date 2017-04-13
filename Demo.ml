@@ -14,6 +14,7 @@ open Transition
 open Turing_Machine
 open Configuration
 open Execution
+open Emulator
 
  
 let (incr_decr: unit -> Configuration.t) = fun () ->
@@ -319,13 +320,29 @@ let (q5t2: unit -> Configuration.t) = fun () ->
 	let question3 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Btwo ; Run Turing_Machine.reduc ; Run Turing_Machine.sub ] in
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
-
+(*
+let (codage: unit -> Configuration.t) = fun () ->
+      let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
+      let sim = Binary.make_simulator alphabet
+      and bandCodage = Band.make alphabet [U;U;Z;Z;Z;U;U;Z;U;Z;U;U;Z;Z;Z;U;U;U;U;Z] in
+	let band1 = sim.encoder bandCodage 
+	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
+	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
+	let question3 = Turing_Machine.sequence [ Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Bthree ; Run Turing_Machine.go_first_O ; Run Turing_Machine.cpy_Bone_Btwo ; Run Turing_Machine.reduc ; Run Turing_Machine.sub ] in
+	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
+	    Execution.log_run cfg
+*)
 (*let encoding = build_encoding alphabet in
       { name = "Binary" ;
         encoder = encode_with encoding ;
         decoder = decode_with encoding ;
         emulator = emulate_action
-      }*)
+      }
+
+	let encode_band : encoding -> Band.t -> Band.t
+
+*)
 
 (*Présent plusieurs fois *)
 let (q5t3: unit -> Configuration.t) = fun () ->
