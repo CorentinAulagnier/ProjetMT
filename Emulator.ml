@@ -567,12 +567,13 @@ struct
 			
 			let newTransitions = makeTransitions source trans target in
 			
-			{ Turing_Machine.nop with
+					{ Turing_Machine.nop with
         name = String.concat "" [ "Binary" ; Pretty.parentheses (Action.to_ascii action) ] ;
         initial = source ;
         accept  = target ;
         transitions = newTransitions
-      }
+}
+			
 
 (**********************************)
 
@@ -580,6 +581,31 @@ struct
 
 
   (* THE SIMULATOR *)
+	
+	let rec turingTransitions : transitions -> encoding-> transitions
+	= fun trans code ->
+		match trans with
+		| [] -> []
+		| x::xs -> (match x with
+								|(i, Action a, f) -> ((emulate_action code (i, a,f)).transitions) @ (turingTransitions xs code)
+								)  
+	
+	
+	
+	let turingSimulator : Turing_Machine.t -> encoding -> Turing_Machine.t
+	=fun mt code ->	
+	 { name = String.concat "" [ "Binary" ;  mt.name ] ;
+		     nb_bands = mt.nb_bands ;
+		     initial = mt.initial ; accept = mt.accept ; reject = mt.reject ;
+		     transitions = turingTransitions mt.transitions code;
+		   }
+	
+	
+	
+	
+	
+	
+	
 
   (** MODIFIED 27/03/2107 *)
   let make_simulator : Alphabet.t -> simulator
