@@ -1,4 +1,4 @@
-(* Michaïel PïeRIN, Verimag / Universitïe Grenoble-Alpes, Fïevrier 2017
+(* MichaÃ¯el PÃ¯eRIN, Verimag / UniversitÃ¯e Grenoble-Alpes, FÃ¯evrier 2017
  *
  * Part of the project TURING MACHINES FOR REAL
  *
@@ -395,15 +395,189 @@ struct
 
   (* EMULATION OF TRANSITIONS *)
 
-  let (emulate_action: State.t * Action.t * State.t -> Turing_Machine.t)
+
+
+
+
+		
+(**********************************)
+
+
+
+(* Creation de transitions permettant d'ecrire la liste de bit "Bits.t" *)
+	let rec ecriture : Bits.t -> instruction list =
+		fun codeWriting ->
+  		match codeWriting with 
+  		| [x] ->   [ (Action (RWM ( Match ANY , Write x  , Here))) ]
+  		| x::xs ->   ((Action (RWM ( Match ANY, Write x, Right))) :: (ecriture xs))
+
+	let rec totoSeDeplaceAGauche : int  -> instruction list = 
+		fun nb -> 
+			match nb with
+			| 0 -> []
+			| nb -> Action (RWM(Match ANY, No_Write, Left)):: (totoSeDeplaceAGauche (nb-1) )
+
+(* Fonctions permettant de lire le symbole code *)
+
+(* Creation de transitions permettant de lire la liste de bit "Bits.t" puis de revenir au debut*)
+	let rec lecture : Bits.t -> instruction list =
+		fun codeReading  ->  
+  		match codeReading with  				(* On utilise le nom des etats comme pile *)
+  		| [] ->  []
+  		| B::xs -> Action (RWM ( Match (VAL B), No_Write, Right)) :: (lecture xs )
+  		| D::xs -> Action (RWM ( Match (VAL D), No_Write, Right)) :: (lecture xs )
+
+(* Creation de la liste de transitions permettant de lire le symbole "reading" code
+	let totoLit : Symbol.t -> Symbol.t -> encoding -> instruction list	= 
+		fun reading writing encoding  ->
+		let codeLecture = associated_symbol reading encoding in (* On recupere le code du symbole "reading" *)
+				let codeEcriture = associated_symbol writing encoding in (* On recupere le code du symbole "writing" *)
+		lecture  codeLecture codeEcriture (nombreMaxBits codeLecture)							 On cree les transitions permettant de le lire puis on revient au debut de l'ecriture sur la bande *)
+		
+(**********************************)													
+												
+	let rec lectureAny : encoding -> instruction list 
+	= fun code -> 
+		match code with
+		| [] -> []
+		| x::xs -> (Seq (List.concat[ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ]) ) :: (lectureAny xs) 										
+														
+														
+	let rec lectureEcritureAny : Symbol.t ->encoding -> instruction list 
+	= fun w code -> 
+		match code with
+		| [] -> []
+		| x::xs -> (Seq (List.concat[ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))); (ecriture (associated_symbol w code)) ]) ) :: (lectureEcritureAny w xs) 		
+
+
+
+	let rec lectureDansListe : Symbol.t list -> writing -> encoding -> instruction list
+		= fun sList write encode ->
+			match sList with 
+      | [] -> []
+      | s::xs -> (match write with 
+                  | No_Write -> (Seq ( List.concat [(lecture (associated_symbol s encode)) ; (totoSeDeplaceAGauche (nombreMaxBits (associated_symbol s encode))) ] )):: (lectureDansListe xs write encode)
+                  | Write w -> (Seq (List.concat [ (lecture (associated_symbol s encode)) ; (totoSeDeplaceAGauche (nombreMaxBits (associated_symbol s encode))) ;(ecriture (associated_symbol w encode)) ] )) ::  (lectureDansListe xs write encode)
+									)
+
+
+	let rec tousSaufLuiLectureEcriture : Symbol.t -> Symbol.t -> encoding -> instruction list
+		= fun v s encode ->
+				match encode with 
+    		| [] -> []
+    		| x::xs -> if ((fst x)<>v) then (
+					(Seq (List.concat [ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ;(ecriture (associated_symbol s encode)) ] )) :: (tousSaufLuiLectureEcriture v s xs)
+					) else (tousSaufLuiLectureEcriture v s xs) 
+
+
+	let rec tousSaufLuiLecture : Symbol.t -> encoding -> instruction list
+		= fun v encode ->
+				match encode with 
+    		| [] -> []
+    		| x::xs -> if ((fst x)<>v) then (
+					(Seq (List.concat [ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ] )) :: (tousSaufLuiLecture v xs)
+					) else (tousSaufLuiLecture v xs) 
+
+	let rec contains : Symbol.t -> Symbol.t list -> int 
+	=fun s l ->
+		match l with
+		| [] -> 0
+		| x :: xs -> if (s=x) then 1 else (contains s xs)
+
+
+
+	let rec lectureEcritureOrListe : Symbol.t list -> Symbol.t -> encoding -> instruction list
+		= fun sList write encode ->
+				match encode with 
+    		| [] -> []
+    		| x::xs -> if ( (contains (fst x) sList) = 1) then ( (* il est dans la liste *)
+					(lectureEcritureOrListe sList write xs) 
+					) else (
+						(Seq (List.concat [ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ;(ecriture (associated_symbol write encode)) ] )) :: (lectureEcritureOrListe sList write xs)
+						)
+
+	let rec lectureOrListe : Symbol.t list -> encoding -> instruction list
+		= fun sList encode ->
+				match encode with 
+    		| [] -> []
+    		| x::xs -> if ( (contains (fst x) sList) = 1) then ( (* il est dans la liste *)
+					(lectureOrListe sList xs) 
+					) else (
+						(Seq (List.concat [ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ] )) :: (lectureOrListe sList xs)
+						)
+
+
+
+																
+	let rwm_to_instruction : reading -> writing -> encoding -> instruction list
+	=fun read write encode ->
+		match read with
+		| Match s -> (match s with
+									|VAL v ->  (match write with 
+                              | No_Write ->   ((lecture (associated_symbol v encode))@ (totoSeDeplaceAGauche (nombreMaxBits (associated_symbol v encode))))
+                              | Write s ->  ((lecture (associated_symbol v encode))@ (totoSeDeplaceAGauche (nombreMaxBits (associated_symbol v encode))) @ (ecriture (associated_symbol s encode)))
+    													)										 
+									|ANY -> (match write with 
+                          | No_Write -> (lectureAny encode)
+                          | Write s -> (lectureEcritureAny s encode)
+													)
+                  | BUT v ->  (match write with 
+                          | No_Write -> (tousSaufLuiLecture v encode)
+                          | Write s -> (tousSaufLuiLectureEcriture v s encode)
+													)
+                  | IN  v  -> lectureDansListe v write encode
+                  | OUT v  -> (match write with 
+                              | No_Write -> (lectureOrListe v encode)
+                              | Write s -> (lectureEcritureOrListe v s encode)
+    													)
+										
+									)
+
+	let rec actionSimultane : Action.t list -> encoding -> instruction list = 
+		fun actionListe encoding ->
+			match actionListe with 
+			| [x] -> (match x with
+                | RWM (reading, writing, moving) -> rwm_to_instruction reading writing encoding
+                | Simultaneous(listeAction) -> actionSimultane listeAction encoding 
+                | Nop -> []
+								)
+			|	x::xs -> (actionSimultane [x] encoding ) @ (actionSimultane xs encoding)
+		
+
+	let rec makeTransitions : State.t -> instruction list -> State.t -> transitions
+	= fun src inst trgt ->
+		match inst with
+		| [] -> []
+		| x :: xs -> ( src , x , trgt) :: ( makeTransitions src xs trgt)
+
+  let (emulate_action: encoding -> State.t * Action.t * State.t -> Turing_Machine.t)
   (* PROJET 2017: modifiez ce code -> *)
-    = fun (source,action,target) ->
-      { Turing_Machine.nop with
+    = fun encoding (source,action,target)  ->
+			let nbBits = (nombreMaxBits (snd (List.hd encoding) )) in
+      let trans = match action with
+      | RWM (reading, writing, moving) -> [Seq (rwm_to_instruction reading writing encoding @ (match moving with
+																																																	|Here ->  (totoSeDeplaceAGauche nbBits)
+																																																	|Left ->  ((totoSeDeplaceAGauche nbBits) @ (totoSeDeplaceAGauche nbBits))
+																																																	|Right -> [] 
+																																																	)
+																																																	)]
+      | Simultaneous(listeAction) -> actionSimultane listeAction encoding
+      | Nop -> []
+			in
+			
+			let newTransitions = makeTransitions source trans target in
+			
+			{ Turing_Machine.nop with
         name = String.concat "" [ "Binary" ; Pretty.parentheses (Action.to_ascii action) ] ;
-        initial = State.initial ;
-        accept  = State.accept ;
-        transitions = [(State.initial,Action(action),State.accept)]
+        initial = source ;
+        accept  = target ;
+        transitions = newTransitions
       }
+
+(**********************************)
+
+
+
 
   (* THE SIMULATOR *)
 
@@ -414,7 +588,7 @@ struct
       { name = "Binary" ;
         encoder = encode_with encoding ;
         decoder = decode_with encoding ;
-        emulator = emulate_action
+        emulator = emulate_action encoding
       }
 
 end
@@ -430,8 +604,7 @@ let (demo: unit -> unit) = fun () ->
   let tm = Turing_Machine.incr in
   let cfg = Configuration.make tm [ band ] in
   let _final_cfg = Simulator.log_run_using
-      ([ (* Split.simulator ; *)
-        (** MODIFIED 27/03/2107 *) Binary.make_simulator alphabet
+      ([  Binary.make_simulator alphabet
       ],[])
       cfg
   in ()
