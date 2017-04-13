@@ -264,8 +264,8 @@ struct
 	= fun alphabet i nb ->
 						match alphabet with
 						| [] -> []
-						| [x] -> (x , ( compl ((nBits nb)-(nBits i)) (Bits.int_to_bits i) ) )::(code [] (incr i) nb ) 
-  					| x::xs -> (x , ( compl ((nBits nb)-(nBits i)) (Bits.int_to_bits i) ) )::(code xs (incr i) nb )
+						| [x] -> (x , ( compl (nb-(nBits i)) (Bits.int_to_bits i) ) )::(code [] (incr i) nb ) 
+  					| x::xs -> (x , ( compl ( nb-(nBits i)) (Bits.int_to_bits i) ) )::(code xs (incr i) nb )
 
 	(*fonction associant un symbole a un code binaire*)
   let build_encoding : Alphabet.t -> encoding
