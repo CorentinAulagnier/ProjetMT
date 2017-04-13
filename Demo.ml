@@ -14,7 +14,6 @@ open Transition
 open Turing_Machine
 open Configuration
 open Execution
-open Emulator
 
  
 let (incr_decr: unit -> Configuration.t) = fun () ->
