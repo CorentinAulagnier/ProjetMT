@@ -73,7 +73,7 @@ module Execution =
 
     and log_run ?call_depth:(call_depth=2) ?log:(log=[]) : (Configuration.t -> Configuration.t) = fun cfg ->
     	cfg.logger#print "<!DOCTYPE html>\n<html>\n\t<head>
-    	<meta charset=utf-8/>\n\t\t<title>Projet MT 2017</title>
+    	<meta charset=utf-8>\n\t\t<title>Projet MT 2017</title>
     	<link rel=\"stylesheet\" href=\"reset.css\" type=\"text/css\">
     	<link rel=\"stylesheet\" href=\"mt.css\" type=\"text/css\" title=\"principal\">\n\t</head>\n\t<body>
     	<div id=\"wrapper\">\n\t\t<header><h1>Projet MT 2017 : Rendu html</h1></header>\n\t\t<div id=\"demo_contenu\"> 
