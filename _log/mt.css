@@ -42,11 +42,12 @@ h1{
 #demo_contenu{
     width: 100%;
     min-width:100%; 
-    padding-bottom: 3em;
+    padding-bottom: 2em;
     background-color: #F8F8FF;
     border-left: 2px #e6e6e6;
     border-right: 2px #e6e6e6;
     border-style: ridge;
+    overflow-x:auto;
 }
 
 footer {  
@@ -54,15 +55,18 @@ footer {
     bottom:0px;
     left: 0px;
     right: 0px;
-    height:5em;
+    height:4em;
     min-width:100%; 
     text-align:center;
-    font-size: x-small;
+    font-size: small;
     font-variant: small-caps;
-    background-color: transparent;
+    background-color:  #cccccc;
+    border: 2px #e6e6e6;
+    border-style: ridge;
 }          
 footer p{
-    margin-top:2em;
+    margin-top:1.25em;
+    color: #8888888;
 }            
 /************************************/
 /*             bands               */
@@ -105,12 +109,25 @@ th{
     height: 100%;
     vertical-align: middle; 
 }
+.state,.pok,.nok,.ok{
+    border-right: 1px #e6e6e6;
+    border-style: ridge;
+}
+.nok{
+background-color: #f04242;
+}
+.ok{
+background-color: #bfec93;
+}
 
 .machine{
     width : 200px;
+    min-width: 200px;
+    font-variant: small-caps;
 }
 .state,.pok,.nok,.ok{
     width : 75px;
+    min-width: 75px;
 }
 .symbol{
     width : 35px;  
