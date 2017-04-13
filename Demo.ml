@@ -389,30 +389,9 @@ let (demo: unit -> unit) = fun () ->
 	   * gr2 ()
 	   * gp Turing_Machine.cpy_Bone_Bthree
 	   *)
-	   
-	  (*My tests *)
-	  
-	  (*Tests Q1
-	   *
-	   * t1q1 () ;
-	   * t2q1 () ;
-	   * t3q1 () 
-	   *)
-
-	  (*Tests Q2
-	   *On remplace toujours la variable X
-	   *
-	   * t1q2 () ;
-	   * t2q2 () ;
-	   * t3q2 ()
-	   *)
-
-	  (*Tests Q3
-	   *
-	   * t1q3 () ;
-	   * t2q3 () ;
-	   * t3q3 () ;
-	   *)
+q3t1 () ;
+q3t2 () ;
+q3t3 () 
 
 
            (* busy_beaver Turing_Machine.bb4
