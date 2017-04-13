@@ -81,6 +81,24 @@ module Symbol =
 	| Vector symbols -> Pretty.parentheses (String.concat "," (List.map to_ascii symbols))
 		  
 	| Column symbols -> Pretty.bracket (String.concat "|" (List.map to_ascii symbols))
+
+	let rec (to_asciiPerso: symbol -> string) =
+      function
+	| B -> "_"
+	| U -> "U"
+	| Z -> "Z"
+	| D -> "dollar"
+	| S -> "diese"
+		  
+	| L -> "L"	      
+	| O -> "parenthese_o"
+	| C -> "parenthese_f"
+	| X -> "x"
+	| V(string,int) -> string ^ (if int<0 then "" else string_of_int int)
+
+	| Vector symbols -> Pretty.parentheses (String.concat "," (List.map to_ascii symbols))
+		  
+	| Column symbols -> Pretty.bracket (String.concat "|" (List.map to_ascii symbols))
 		  
 		  
 	(****************************************************************************************************)
@@ -105,7 +123,7 @@ module Symbol =
 	  | Vector symbols -> Html.tuple  options (List.map (to_html []) symbols)
 	  | Column symbols -> Html.column options (List.map (to_html []) symbols)
 	  | _ ->
-		  Html.cell [ ("class", Html.Option ("\"symbol "^(to_ascii symbol)^"\""))  ]  (* appliquer un bg et une color spéciale par symbole cf au dessus *)
+		  Html.cell [ ("class", Html.Option ("\"symbol "^(to_asciiPerso symbol)^"\""))  ]  (* appliquer un bg et une color spéciale par symbole cf au dessus *)
 		    (to_ascii symbol)
 
 	(****************************************************************************************************)
