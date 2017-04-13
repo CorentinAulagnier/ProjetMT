@@ -72,11 +72,28 @@ module Execution =
 	  end
 
     and log_run ?call_depth:(call_depth=2) ?log:(log=[]) : (Configuration.t -> Configuration.t) = fun cfg ->
+    	cfg.logger#print "<!DOCTYPE html>\n<html>\n\t<head>
+    	<meta charset=utf-8/>\n\t\t<title>Projet MT 2017</title>
+    	<link rel=\"stylesheet\" href=\"reset.css\" type=\"text/css\">
+    	<link rel=\"stylesheet\" href=\"mt.css\" type=\"text/css\" title=\"principal\">\n\t</head>\n\t<body>
+    	<div id=\"wrapper\">\n\t\t<header><h1>Projet MT 2017 : Rendu html</h1></header>\n\t\t<div id=\"demo_contenu\"> 
+    	<TABLE class=\"band\"><thead><tr><TH class=\"machine\">Machine</TH><TH class=\"state\">Etat</TH><TH class=\"symboles\">Symboles</TH></tr></thead></TABLE>\n\n\n";
+
+    	let final_cfg = run (call_depth, cfg.logger::log) cfg in
+		    begin
+		    	cfg.logger#print "\n\n\t\t</div>\n\t\t\t<footer><p>Projet Machine de Turing 2017 - Aulagnier Carriere Riou Thisse</p></footer>
+		    	\n\t\t</div>\n\t</body>\n</html>";
+		    	cfg.logger#close ;
+		    	final_cfg
+		    end
+	(*
+	and log_run ?call_depth:(call_depth=2) ?log:(log=[]) : (Configuration.t -> Configuration.t) = fun cfg ->
 	  let final_cfg = run (call_depth, cfg.logger::log) cfg in
 	    begin
 	      cfg.logger#close ;
 	      final_cfg
 	    end
+	 *)
 
     and (run: int * log -> Configuration.t -> Configuration.t) = fun log cfg ->
     	  if (cfg.status = Final)

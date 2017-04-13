@@ -17,38 +17,15 @@ type cells = content list
 type row = content
 type rows = row list      
 type table = content
+type tables = table list      (* ajout de types *)
+type body = content           (* ajout de types *)
 
 type valeur =
   | Int of int
   | Option of string
   | Color of Color.t
 	      
-type options = (string * valeur) list
-
-(* UNUSED ? USEFUL ?
-type descriptor = {
-    width: int option ;
-    height: int option ;
-    bgcolor: Color.t option ;
-    ftcolor: Color.t option  ;
-    font_size: int option ;
-    align: string  option ;
-    valign: string option 
-  }
-      
-let (descriptor: descriptor) = {
-  width  = Some 10 ;
-  height = Some 10 ;
-  bgcolor = None ;
-  ftcolor = None ;
-  font_size = None ;
-  align  = Some "center" ;
-  valign = Some "center" ;
-}     
- *)
-
-      
-
+type options = (string * valeur) list   
 
 let (concat: content list -> content) = String.concat "\n"
     
@@ -81,10 +58,16 @@ let (environment: string * string * string -> options -> content -> content) = f
 
 
 (* TABLE *)
+(* body: <BODY option> tables </BODY>  ou liste de tables*)
+let (body: options -> tables -> body) = fun options tables ->
+      environment ("Debut de pagE","DIV","Puis fin de pagE") options (concat tables)
+
 	
 (* table cell: <TD option> content </TD> *)
 	
 let (cell: options -> content -> cell) = environment ("  ","TD","")
+
+let (cell_name: options -> content -> cell) = environment ("  ","TD class=\"machine\"","")
     
 let (wide_cell: int -> int -> cell) = fun width n ->
       if n>0
@@ -130,3 +113,32 @@ let (font: options -> content -> content)  = environment ("","FONT","")
 let (italic: content -> content) = environment ("","I","") []
 
 let (bold: content -> content) = environment ("","B","") [] 
+
+(* où Debut de pagE vaudra à terme*)
+(*"
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=/"utf-8/" />
+    <title>Projet 2017 - </title>
+    <link rel=/"stylesheet/" href="reset.css" type=/"text/css/">
+    <link rel=/"stylesheet" href=/"mt.css/" type=/"text/css/" title="principal/">
+  </head>
+  <body>
+    <div id=/"wrapper//">
+      <header><h1>Demo html</h1></header>
+      <div id=/"demo_contenu/">
+"*)
+
+(* où Puis fin de pagE*)
+(*"
+     </div>
+      <footer>
+          <p>Projet Machine de Turing 2017 - Aulagnier Carriere Riou Thisse</p>
+      </footer> 
+    </div>
+  </body>
+</html> 
+<!-- Soumettre au validator http://html5.validator.nu -->
+<!-- Sinon validator : http://validator.w3.org/ -->
+"*)

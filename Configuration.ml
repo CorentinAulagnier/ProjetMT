@@ -64,21 +64,22 @@ module Configuration =
     (* html *)
 
     let (to_html: Html.options -> configuration -> Html.table) = fun options cfg ->
-	  let tm_name = Html.cell [] cfg.tm.name
+	  let tm_name = Html.cell_name [] cfg.tm.name
 	      
 	  and bands = Html.cell [] (Band.to_html_many options cfg.bands)
 
 	  and state =
-	         let state_color =
-		   if cfg.state = cfg.tm.accept then Color.green
-		   else if cfg.state = cfg.tm.reject then Color.red
-		   else Color.white
-		 in State.to_html [("bgcolor", Html.Color state_color)] cfg.state
-    	  in
-	    Html.table
-	      (options @ [ ("bordercolor", Html.Color Color.gray) ; ("cellpadding",Html.Int 0) ; ("cellspacing",Html.Int 0) ; ("border",Html.Int 1) ])
+	         let accept_stat =
+		   if cfg.state = cfg.tm.accept then "\"ok\""
+		   else if cfg.state = cfg.tm.reject then "\"nok\""
+		   else "\"pok\""
+		 in State.to_html (options @ [ ("class", Html.Option accept_stat)]) cfg.state
+    	  in Html.table
+	      (options @ [ ("class", Html.Option "\"band\"") ])
 	      [ tm_name ; state ; bands ]
-	      
+(* option de table : [ ("bordercolor", Html.Color Color.gray) ; ("cellpadding",Html.Int 0) ; ("cellspacing",Html.Int 0) ; ("border",Html.Int 1) ] *)	      
+
+
     (* user *)
 
     let (pretty: t -> string) = fun t ->
@@ -123,7 +124,3 @@ let (demo: unit -> unit) = fun () ->
 	      cfg.logger#print (Configuration.to_html [] cfg) ;
 	      cfg.logger#close 
 	    end
-	      
-    
-
-

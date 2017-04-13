@@ -63,12 +63,23 @@ module State =
 			     @ (List.map string_of_int integers)
 			    )
 
-    (* html *)
+  (****************************************************************************************************)
+  (*                                          HTML                                                    *)
+  (****************************************************************************************************)
 
     let (to_html: Html.options -> state -> Html.content) = fun options state ->
-	  Html.cell
-	    (options @ [("align", Html.Option "center")])
-	    (to_ascii state)
+    Html.cell
+      options (to_ascii state)
+
+(*    let (to_html: Html.options -> state -> Html.content) = fun options state ->
+    Html.cell
+      (options @ [("align", Html.Option "center")])
+      (to_ascii state)
+*)
+  (****************************************************************************************************)
+  (*                                          /HTML                                                    *)
+  (****************************************************************************************************)
+
 
     (* user *)
 	    

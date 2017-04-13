@@ -121,17 +121,26 @@ module Band =
 	  String.concat "\n" (List.map to_ascii bands)
 
 
-    (* html *)
-	    
+	(****************************************************************************************************)
+    (* 											HTML 													*)
+	(****************************************************************************************************)
+
     let (cell_to_html: band -> symbol -> Html.cell) = fun band symbol  ->
 	  Symbol.to_html [ ("colspan", Html.Int band.alphabet.symbol_size_in_bits) ] symbol
 
 	    
-    let (head_to_html: band -> symbol -> Html.cell) = fun band symbol ->
+    (*let (head_to_html: band -> symbol -> Html.cell) = fun band symbol ->
 	  Html.cell []
 	    (Html.table [("bordercolor", Html.Color Color.green)]
 	       [ Html.row [] [ cell_to_html band band.head ] ]
 	    )
+*)
+	let (head_to_html: band -> symbol -> Html.cell) = fun band symbol ->
+	  Html.cell []
+	    (Html.table [("class", Html.Option "\"tete_lecture\"")]  (* option = bordercolor=green *)
+	       [ Html.row [] [ cell_to_html band band.head ] ]
+	    )
+	
 
     let (to_html: Html.options -> band -> Html.row) = fun options band ->
 	  let cells = 
@@ -143,12 +152,22 @@ module Band =
 	  in
 	    Html.row options cells
 
-    let (to_html_many: Html.options -> band list -> Html.table) = fun options bands -> 
+    (*let (to_html_many: Html.options -> band list -> Html.table) = fun options bands -> 
 	  let rows = List.map (to_html []) bands in
 	    Html.table
 	      (options @ [ ("bordercolor", Html.Color Color.white) ; ("cellpadding",Html.Int 1) ; ("cellspacing",Html.Int 0) ; ("border",Html.Int 1) ])
 	      rows
-	      
+*)
+	let (to_html_many: Html.options -> band list -> Html.table) = fun options bands -> 
+	  let rows = List.map (to_html []) bands in
+	    Html.table
+	      (options @ [ ("class", Html.Option "\"band\"") ]) (* <TABLE bordercolor=white cellpadding=1 cellspacing=0 border=1> *)
+	      rows
+
+	(****************************************************************************************************)
+    (* 											/HTML 													*)
+	(****************************************************************************************************)
+
     (* user *)
 
     let (pretty: t -> string) = fun t ->

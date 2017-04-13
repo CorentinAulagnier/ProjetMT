@@ -83,8 +83,10 @@ module Symbol =
 	| Column symbols -> Pretty.bracket (String.concat "|" (List.map to_ascii symbols))
 		  
 		  
-   (* html output *)
-		    
+	(****************************************************************************************************)
+	(*                                          HTML                                                    *)
+	(****************************************************************************************************)
+	(* unused *)	    
     let (color: symbol -> Color.t * Color.t) = fun symbol ->
 	  match symbol with (* back_ground_color, font_color *)
 	  | B -> (Color.white , Color.white)
@@ -93,8 +95,8 @@ module Symbol =
 	  | D -> (Color.black , Color.black)
 	  | S -> (Color.red   , Color.red)		    
 	  | _ -> (Color.white , Color.black)
-		    
-    let (ft_color: symbol -> Color.t) = fun symbol -> snd (color symbol)
+				    
+    let (ft_color: symbol -> Color.t) = fun symbol -> snd (color symbol)	
     let (bg_color: symbol -> Color.t) = fun symbol -> fst (color symbol)
 
 
@@ -103,10 +105,23 @@ module Symbol =
 	  | Vector symbols -> Html.tuple  options (List.map (to_html []) symbols)
 	  | Column symbols -> Html.column options (List.map (to_html []) symbols)
 	  | _ ->
+		  Html.cell [ ("class", Html.Option ("\"symbol "^(to_ascii symbol)^"\""))  ]  (* appliquer un bg et une color spéciale par symbole cf au dessus *)
+		    (to_ascii symbol)
+
+	(****************************************************************************************************)
+	(*                                          /HTML                                                   *)
+	(****************************************************************************************************)
+(*
+    let rec (to_html: Html.options -> symbol -> Html.cell) = fun options symbol ->
+	  match symbol with
+	  | Vector symbols -> Html.tuple  options (List.map (to_html []) symbols)
+	  | Column symbols -> Html.column options (List.map (to_html []) symbols)
+	  | _ ->
 		  Html.cell [ ("align", Html.Option "center") ; ("bgcolor", Html.Color (bg_color symbol)) ]
 		    (Html.font [ ("color", Html.Color (ft_color symbol)) ]
 		       (Html.bold (to_ascii symbol)))
-		    
+*)
+
 
     (* user *)
       

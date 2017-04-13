@@ -75,8 +75,12 @@ module Instruction =
 	  | Parallel instructions -> Pretty.bracket (String.concat " || " (List.map to_ascii instructions))
 		    
     let (to_html: Html.options -> instruction -> Html.cell) = fun options instruction ->
-	  Html.cell options (to_ascii instruction)
+	  Html.cell (options @ [ ("class", Html.Option "\"transition\"") ]) (to_ascii instruction)
 	    
+(*
+	let (to_html: Html.options -> instruction -> Html.cell) = fun options instruction ->
+	  Html.cell options (to_ascii instruction)
+*)
     (* user *)
 
     let (pretty: t -> string) = fun t ->
