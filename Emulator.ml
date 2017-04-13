@@ -286,7 +286,6 @@ struct
 			| [] -> sym
   		| D::next -> (bits_in_symbols_list (D::sym) (List.tl bit )) 
 			| B::next -> (bits_in_symbols_list (B::sym) (List.tl bit )) 
-			|_ -> []
 	
 	(*change une liste de symbole en une liste de leur traduction en bits *)
 	let rec replaceBand : Symbol.t list -> encoding -> Bits.t list
@@ -336,7 +335,6 @@ struct
 		| nBits -> (match decode with
 									| B::xs -> aG Bit.zero (decode_bits (nBits-1) xs)  
 									| D::xs -> aG Bit.unit (decode_bits (nBits-1) xs) 
-									|_ -> []
 								)
 		
 		(*decale la liste de symbole du nombre de decalage donnes*)
@@ -413,7 +411,6 @@ struct
   		match codeWriting with 
   		| [x] ->   [ (Action (RWM ( Match ANY , Write x  , Here))) ]
   		| x::xs ->   ((Action (RWM ( Match ANY, Write x, Right))) :: (ecriture xs))
-			|_ -> []
 
 	let rec totoSeDeplaceAGauche : int  -> instruction list = 
 		fun nb -> 
@@ -430,7 +427,6 @@ struct
   		| [] ->  []
   		| B::xs -> Action (RWM ( Match (VAL B), No_Write, Right)) :: (lecture xs )
   		| D::xs -> Action (RWM ( Match (VAL D), No_Write, Right)) :: (lecture xs )
-			|_ -> []
 
 (* Creation de la liste de transitions permettant de lire le symbole "reading" code
 	let totoLit : Symbol.t -> Symbol.t -> encoding -> instruction list	= 
@@ -546,9 +542,7 @@ struct
                 | Simultaneous(listeAction) -> actionSimultane listeAction encoding 
                 | Nop -> []
 								)
-			|	x::xs -> (actionSimultane [x] encoding ) @ (actionSimultane xs encoding)
-			|_ -> []
-		
+			|	x::xs -> (actionSimultane [x] encoding ) @ (actionSimultane xs encoding)		
 
 	let rec makeTransitions : State.t -> instruction list -> State.t -> transitions
 	= fun src inst trgt ->
@@ -594,7 +588,6 @@ struct
 		| [] -> []
 		| x::xs -> (match x with
 								|(i, Action a, f) -> ((emulate_action code (i, a,f)).transitions) @ (turingTransitions xs code)
-								|_ -> []
 								)  
 	
 	
@@ -641,4 +634,3 @@ let (demo: unit -> unit) = fun () ->
       ],[])
       cfg
   in ()
-
