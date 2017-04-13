@@ -1,0 +1,126 @@
+* {  
+    margin   :  0;
+    padding  :  0;
+    -moz-box-sizing:border-box;
+    box-sizing :border-box;
+}
+body{  
+    height: 100%;      
+    font-family:verdana,arial,sans-serif;
+    font-size :  1.1em;
+    background-color :  #f9f9f9;
+}
+#wrapper {
+    position :relative; 
+    min-height: 100%;
+    width : 800px;
+    min-width:75%; 
+    margin-left:auto;
+    margin-right :auto; 
+
+    border-left: 4px #e6e6e6;
+    border-right: 4px #e6e6e6;
+    border-style: ridge;
+}   
+/************************************/
+/*      header/footer				*/
+/************************************/
+header{
+    height:75px;
+    text-align:center;
+    font-size :  1.7em;
+}
+
+h1{
+    padding-top: 20px;
+}
+
+#demo_contenu{
+    width: 100%;
+    min-width:100%; 
+    padding-bottom: 3em;
+}
+
+footer {  
+    position:absolute;
+    bottom:0px;
+    left: 0px;
+    right: 0px;
+    height:3em;
+    min-width:100%; 
+    text-align:center;
+    font-size: x-small;
+}                      
+/************************************/
+/*             bands               */
+/************************************/
+/* band c'est un tableau de toute une bandee, utile pour la largeur */
+/* class ok c'est vert si machine t accepte, .nok rouge rejete, sinon pok blanc */
+
+.band{
+    width: 100%;
+    border-bottom: 1px #e6e6e6;
+    border-top: 1px #e6e6e6;
+    border-style: ridge;
+}
+thead{
+    width: 100%;
+    height: 3em;
+    background-color: #aaaaaa;
+    color: white;
+    font-size :  1.1em;   
+    border-left: 1px #e6e6e6;
+}
+th{
+    height: 3em;
+    vertical-align: middle; 
+}
+
+.machine,.state,.pok,.nok,.ok,.symbol,.symboles{
+    padding: 8px 8px; 
+    border-left: 1px #e6e6e6;
+    border-style: ridge;
+}
+
+
+.machine,.state,.pok,.nok,.ok,.symbol{
+    text-align: center;
+    height: 100%;
+    vertical-align: middle; 
+}
+
+.machine{
+    width : 200px;
+}
+.state,.pok,.nok,.ok{
+    width : 75px;
+}
+.symbol{
+    width : 35px;
+}
+
+tr{
+    display: inline-block;
+    text-align: left;
+}
+
+/*
+.tete_lecture{
+    background-color: #dddddd;
+}
+
+.x{
+
+}
+
+    | B -> "_"
+    | U -> "U"
+    | Z -> "Z"
+    | D -> "$"
+    | S -> "#"
+          
+    | L -> "L"        
+    | O -> "("
+    | C -> ")"
+    | X -> "x"
+*/
