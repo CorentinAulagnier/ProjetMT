@@ -41,8 +41,3 @@ Binary.decode_with encode (Binary.encode_with encode [band;band2]);; (*encodage/
 		]
 	      }) encode (*simulation d'une mt en binaire*)
 	      
-	      
-(*Les Problèmes de la question 2 et 5 :
-- ANY, BUT, IN, OUT a arranger
-- Parallel, Run etc... a implementer comme il faut
-*)
