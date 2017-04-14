@@ -299,7 +299,7 @@ let (q3t4: unit -> Configuration.t) = fun () ->
 
 (*-------------------------------------------------------------------------------------------------------------------------*)
 (*Beta reduction **)	
-(*present une fois *)
+(*B reduc normal avec 1 var *)
 let (q5t1: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;L;X;U;O;X;Z;U;X;U;C;C;O;X;U;X;U;C;B;B;B;B;B;B;B;B;B;B;B] 
@@ -310,7 +310,7 @@ let (q5t1: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
 
-(*Nom présent *)
+(*Var a reduire non présent *)
 let (q5t2: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;L;X;U;O;X;Z;U;Z;X;Z;X;Z;Z;X;U;Z;C;C;O;X;U;U;U;U;C;B;B;B] 
@@ -321,7 +321,7 @@ let (q5t2: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
 
-(*Présent plusieurs fois *)
+(*Var presente plusieurs fois *)
 let (q5t3: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;L;X;U;O;X;U;X;Z;X;Z;Z;X;U;X;U;C;C;O;X;U;U;U;U;C;B;B;B;B] 
@@ -332,7 +332,7 @@ let (q5t3: unit -> Configuration.t) = fun () ->
 	  let cfg = Configuration.make question3 [ band1 ; band2 ; band3 ; band4 ] in
 	    Execution.log_run cfg
 
-(*Tout le temps present *)
+(*B reduc avec et sans masquage *)
 let (q5t4: unit -> Configuration.t) = fun () ->
       let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
 	let band1 = Band.make alphabet [O;L;X;U;O;L;X;Z;U;O;X;U;C;C;O;L;X;U;O;X;U;C;C;C;O;X;Z;Z;C] 
