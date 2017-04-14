@@ -1,43 +1,48 @@
-#load_rec "main.cmo";;
 
+(**--TEST D'ENCODAGE/DECODAGE--**)
 
-open Alphabet;;
-open Band;;
-let alphabet = Alphabet.make [B;Z;U]  ;;
-let band = Band.make alphabet [U;U;Z;U] ;;
-let band2 = Band.make alphabet [B;B;Z;U] ;;
-let encode = Binary.build_encoding alphabet ;;
+(*ETAPE 1*)
+
+	#cd "/home/c/carrieme/WorkspaceMT/";;
+	#load_rec "main.cmo";;
+	open Alphabet;;
+	open Band;;
+	
+(*ETAPE 2*)
+
+Chargement de la classe Emulator.ml
+
+(*ETAPE 3*)  
+
+let alphabet = Alphabet.make [B;Z;U]  ;; (*creation d'un alphabet*)
+let alphabet = Alphabet.make [B;Z;U;O;L;C]  ;; (*creation d'un alphabet*)
+let band = Band.make alphabet [U;U;Z;U] ;; (*creation premiere bande*)
+let band2 = Band.make alphabet [B;B;Z;U] ;; (*creation deuxieme bande*)
+let encode = Binary.build_encoding alphabet ;; (*creation de l'encoding*)
+let code = Binary.encode_with encode [band; band2];; (*codage des bandes*)
+let decode = Binary.decode_with encode code ;; (*decodage des bandes*)
+
+[band,band2];; (*comparaison avec les bandes initiales*)
+Binary.decode_with encode (Binary.encode_with encode [band;band2]);; (*encodage/decodage en un coup*)
+
+ (**--TEST EMULATION DE TRANSITIONS--**)
+ 
+ let mt = Binary.emulate_action encode ( Q 2, (RWM(Match(VAL U), Write Z, Here)) ,Q 3 ) (*creation MT a partir de transistion*)
+ let mt = Binary.emulate_action encode ( Q 2, (RWM(Match(VAL U), Write Z, Right)) ,Q 3 ) (*creation MT a partir de transistion*)
+ let mt = Binary.emulate_action encode ( Q 2, (RWM(Match(VAL U), Write Z, Left)) ,Q 3 ) (*creation MT a partir de transistion*)
+
+ (**--TEST SIMULATION BINAIRE--**)
   
-Binary.encode_band encode band ;;
-let code = Binary.encode_with encode [band; band2];;
-let decode = Binary.decode_with encode code ;;
-[band,band2];; 
-Binary.decode_with encode (Binary.encode_with encode [band;band2]);;
-
-
-
-
-let alphabet = Alphabet.make [B;Z;U]  ;;
-let encode = Binary.build_encoding alphabet ;;
-let trans = ( Q 0 , ( RWM ( Match( VAL B ) ,Write U , Here) ) , Q 1);;
-let trans2 = ( Q 0 , ( RWM ( Match( VAL B ) ,Write U , Left) ) , Q 1);;
-let trans3 = ( Q 0 , ( RWM ( Match( VAL B ) ,Write U , Right) ) , Q 1);;
-
-Binary.emulate_action encode trans2;;
-Binary.emulate_action encode trans;;
-
-
-
-
-let (q5Sim: unit -> Configuration.t) = fun () ->
-      let alphabet = Alphabet.make [B;O;C;L;X;S;U;Z] in
-			let code = Binary.build_encoding alphabet in
-	let band1 = Band.make alphabet [O;L;X;U;O;X;U;X;U;X;U;X;U;X;U;C;C;O;X;Z;C;B;B;B;B;B;B;B;B] 
-	and band2 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
-	and band3 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] 
-	and band4 = Band.make alphabet [B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B;B] in
-	let question3 = Turing_Machine.sequence [ Run go_first_O ; Run cpy_Bone_Bthree ; Run go_first_O ; Run cpy_Bone_Btwo ; Run reduc ; Run sub ] in
-	  let question3_trans = Binary.turingSimulator question3 code in
-		let cfg = Configuration.make question3_trans (Binary.encode_with code [ band1 ; band2 ; band3 ; band4 ] )in
-	    Execution.log_run cfg
-;;
+ let mtSimulator = Binary.turingSimulator (let init = nop.initial and accept = nop.accept in
+	      { nop with
+		transitions =
+ 		[ (init, Action(RWM(Match(VAL B), Write U, Left)), init) ;
+		  (init, Action(RWM(Match(VAL U), Write Z, Here)), accept)
+		]
+	      }) encode (*simulation d'une mt en binaire*)
+	      
+	      
+(*Les Problèmes de la question 2 et 5 :
+- ANY, BUT, IN, OUT a arranger
+- Parallel, Run etc... a implementer comme il faut
+*)
