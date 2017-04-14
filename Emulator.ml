@@ -401,10 +401,11 @@ struct
 
 
 		
-(**********************************)
+(************************************** Question 1.2 **************************************)
 
 
-
+	(* **** Fonctions pour match Val v **** *)		
+	
 (* Creation de transitions permettant d'ecrire la liste de bit "Bits.t" *)
 	let rec ecriture : Bits.t -> instruction list =
 		fun codeWriting ->
@@ -412,13 +413,12 @@ struct
   		| [x] ->   [ (Action (RWM ( Match ANY , Write x  , Here))) ]
   		| x::xs ->   ((Action (RWM ( Match ANY, Write x, Right))) :: (ecriture xs))
 
+(* Deplacement a gauche pour revenir au debut de la lecture (de la liste de bit) pour pouvoir ecrire au bon endroit sur la bande*)
 	let rec totoSeDeplaceAGauche : int  -> instruction list = 
 		fun nb -> 
 			match nb with
 			| 0 -> []
 			| nb -> Action (RWM(Match ANY, No_Write, Left)):: (totoSeDeplaceAGauche (nb-1) )
-
-(* Fonctions permettant de lire le symbole code *)
 
 (* Creation de transitions permettant de lire la liste de bit "Bits.t" puis de revenir au debut*)
 	let rec lecture : Bits.t -> instruction list =
@@ -428,30 +428,25 @@ struct
   		| B::xs -> Action (RWM ( Match (VAL B), No_Write, Right)) :: (lecture xs )
   		| D::xs -> Action (RWM ( Match (VAL D), No_Write, Right)) :: (lecture xs )
 
-(* Creation de la liste de transitions permettant de lire le symbole "reading" code
-	let totoLit : Symbol.t -> Symbol.t -> encoding -> instruction list	= 
-		fun reading writing encoding  ->
-		let codeLecture = associated_symbol reading encoding in (* On recupere le code du symbole "reading" *)
-				let codeEcriture = associated_symbol writing encoding in (* On recupere le code du symbole "writing" *)
-		lecture  codeLecture codeEcriture (nombreMaxBits codeLecture)							 On cree les transitions permettant de le lire puis on revient au debut de l'ecriture sur la bande *)
-		
-(**********************************)													
-												
+	(* **** Fin de fonctions pour match Val v ****  *)	
+	
+							
+	(* **** Fonctions pour match ANY **** *)						
 	let rec lectureAny : encoding -> instruction list 
 	= fun code -> 
 		match code with
 		| [] -> []
 		| x::xs -> (Seq (List.concat[ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ]) ) :: (lectureAny xs) 										
-														
-														
+																							
 	let rec lectureEcritureAny : Symbol.t ->encoding -> instruction list 
 	= fun w code -> 
 		match code with
 		| [] -> []
 		| x::xs -> (Seq (List.concat[ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))); (ecriture (associated_symbol w code)) ]) ) :: (lectureEcritureAny w xs) 		
+	(* **** Fin des fonctions pour match ANY **** *)	
 
 
-
+	(* **** Fonctions pour match IN v **** *)	
 	let rec lectureDansListe : Symbol.t list -> writing -> encoding -> instruction list
 		= fun sList write encode ->
 			match sList with 
@@ -460,8 +455,10 @@ struct
                   | No_Write -> (Seq ( List.concat [(lecture (associated_symbol s encode)) ; (totoSeDeplaceAGauche (nombreMaxBits (associated_symbol s encode))) ] )):: (lectureDansListe xs write encode)
                   | Write w -> (Seq (List.concat [ (lecture (associated_symbol s encode)) ; (totoSeDeplaceAGauche (nombreMaxBits (associated_symbol s encode))) ;(ecriture (associated_symbol w encode)) ] )) ::  (lectureDansListe xs write encode)
 									)
-
-
+	(* **** Fin de fonctions pour match IN v **** *)	
+	
+	
+	(* **** Fonctions pour match BUT v **** *)
 	let rec tousSaufLuiLectureEcriture : Symbol.t -> Symbol.t -> encoding -> instruction list
 		= fun v s encode ->
 				match encode with 
@@ -477,15 +474,16 @@ struct
     		| [] -> []
     		| x::xs -> if ((fst x)<>v) then (
 					(Seq (List.concat [ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ] )) :: (tousSaufLuiLecture v xs)
-					) else (tousSaufLuiLecture v xs) 
+					) else (tousSaufLuiLecture v xs)
+	(* **** Fin de fonctions pour match BUT v **** *) 
 
+
+	(* **** Fonctions pour match OUT v **** *)
 	let rec contains : Symbol.t -> Symbol.t list -> int 
 	=fun s l ->
 		match l with
 		| [] -> 0
 		| x :: xs -> if (s=x) then 1 else (contains s xs)
-
-
 
 	let rec lectureEcritureOrListe : Symbol.t list -> Symbol.t -> encoding -> instruction list
 		= fun sList write encode ->
@@ -506,10 +504,9 @@ struct
 					) else (
 						(Seq (List.concat [ (lecture (snd x)) ; (totoSeDeplaceAGauche (nombreMaxBits (snd x))) ] )) :: (lectureOrListe sList xs)
 						)
+	(* **** Fin de fonctions pour match OUT v **** *)
 
-
-
-																
+	(* **** Creation de la liste d'instructions codees a partir des parametres (lecture, ecriture, code)  pour les actions RWM **** *)																								
 	let rwm_to_instruction : reading -> writing -> encoding -> instruction list
 	=fun read write encode ->
 		match read with
@@ -534,6 +531,7 @@ struct
 										
 									)
 
+	(* **** Fin de fonctions pour match OUT v **** *)
 	let rec actionSimultane : Action.t list -> encoding -> instruction list = 
 		fun actionListe encoding ->
 			match actionListe with 
@@ -542,7 +540,9 @@ struct
                 | Simultaneous(listeAction) -> actionSimultane listeAction encoding 
                 | Nop -> []
 								)
-			|	x::xs -> (actionSimultane [x] encoding ) @ (actionSimultane xs encoding)		
+			|	x::xs -> (actionSimultane [x] encoding ) @ (actionSimultane xs encoding)	
+
+
 
 	let rec makeTransitions : State.t -> instruction list -> State.t -> transitions
 	= fun src inst trgt ->
@@ -550,17 +550,19 @@ struct
 		| [] -> []
 		| x :: xs -> ( src , x , trgt) :: ( makeTransitions src xs trgt)
 
+
+
   let (emulate_action: encoding -> State.t * Action.t * State.t -> Turing_Machine.t)
   (* PROJET 2017: modifiez ce code -> *)
     = fun encoding (source,action,target)  ->
 			let nbBits = (nombreMaxBits (snd (List.hd encoding) )) in
       let trans = match action with
       | RWM (reading, writing, moving) -> [Seq (rwm_to_instruction reading writing encoding @ (match moving with
-																																																	|Here ->  (totoSeDeplaceAGauche nbBits)
-																																																	|Left ->  ((totoSeDeplaceAGauche nbBits) @ (totoSeDeplaceAGauche nbBits))
-																																																	|Right -> [] 
-																																																	)
-																																																	)]
+																												|Here ->  (totoSeDeplaceAGauche nbBits)
+																												|Left ->  ((totoSeDeplaceAGauche nbBits) @ (totoSeDeplaceAGauche nbBits))
+																												|Right -> [] 
+																												)
+																												)]
       | Simultaneous(listeAction) -> actionSimultane listeAction encoding
       | Nop -> []
 			in
@@ -575,7 +577,7 @@ struct
 }
 			
 
-(**********************************)
+(******************************************************)
 
 
 
@@ -599,12 +601,6 @@ struct
 		     initial = mt.initial ; accept = mt.accept ; reject = mt.reject ;
 		     transitions = turingTransitions mt.transitions code;
 		   }
-	
-	
-	
-	
-	
-	
 	
 
   (** MODIFIED 27/03/2107 *)
@@ -634,3 +630,4 @@ let (demo: unit -> unit) = fun () ->
       ],[])
       cfg
   in ()
+	
