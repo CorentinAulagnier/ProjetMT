@@ -28,15 +28,16 @@ body{
 /*      header/footer				*/
 /************************************/
 header{
-    height:75px;
+    height:125px;
     text-align:center;
     font-size :  1.7em;
 }
 
 h1{
-    padding-top: 20px;
+    padding-top: 40px;
     font-family: Georgia;
     font-style: italic;
+	text-decoration: underline;
 }
 
 #demo_contenu{
@@ -69,11 +70,10 @@ footer p{
     color: #8888888;
 }            
 /************************************/
-/*             bands               */
+/*             Contenu              */
 /************************************/
-/* band c'est un tableau de toute une bandee, utile pour la largeur */
-/* class ok c'est vert si machine t accepte, .nok rouge rejete, sinon pok blanc */
 
+/* traitement du tableau, entete et case */
 .band{
     width: 100%;
     border-bottom: 1px #e6e6e6;
@@ -95,31 +95,28 @@ th{
     vertical-align: middle; 
 }
 
-.machine,.state,.pok,.nok,.ok,.symboles{
+/* traitement MeP des colonnes */
+.machine, .state, .pok, .nok, .ok, .symboles, .symbol{
     padding: 8px 8px; 
-    border-left: 1px #e6e6e6;
+
+}
+
+.machine,.state,.pok,.nok,.ok,.symboles{
+	border-left: 1px #e6e6e6;
     border-style: ridge;
 }
 
-.symbol{
-    padding: 8px 8px; 
-}
-.machine,.state,.pok,.nok,.ok,.symbol{
-    text-align: center;
-    height: 100%;
-    vertical-align: middle; 
-}
 .state,.pok,.nok,.ok{
     border-right: 1px #e6e6e6;
-    border-style: ridge;
-}
-.nok{
-background-color: #f04242;
-}
-.ok{
-background-color: #bfec93;
 }
 
+.machine,.state,.pok,.nok,.ok,.symbol{
+	height: 100%;
+    text-align: center;
+    vertical-align: middle; 
+}
+
+/* traitement largeur colonnes */
 .machine{
     width : 200px;
     min-width: 200px;
@@ -134,6 +131,16 @@ background-color: #bfec93;
     font-family: Comic;
 }
 
+/* Statut d'acceptation d'une machine */
+.nok{
+background-color: #f04242;
+}
+.ok{
+background-color: #bfec93;
+}
+
+
+/* spécificités des symboles*/
 tr{
     display: inline-block;
     text-align: left;
@@ -141,33 +148,24 @@ tr{
 
 .U, .Z{
     color: darkblue;
-    font-weight: bold;
+	font-variant: small-caps;
+	font-weight: bold;
 }
-
 .L, .parenthese_o, .parenthese_f{
     color: #B8860B;
     font-weight: bold;
 }
-
 .diese{
     color: red; 
 }
 
+/* traitement de la tête de lecture */
 .tete_lecture {
     padding: 8px 8px; 
-   /* background: rgb(190,220,235); 
-    background: -moz-linear-gradient(-45deg,  rgba(190,220,235,1) 0%, rgba(60,125,210,1) 100%); 
-    background: -webkit-linear-gradient(-45deg,  rgba(190,220,235,1) 0%,rgba(60,125,210,1) 100%); 
-    background: linear-gradient(-45deg,  rgba(190,220,235,1) 0%,rgba(60,125,210,1) 100%); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bedbea', endColorstr='#3d7cd3',GradientType=1 );
-    background-repeat: no-repeat;
-    background-attachment: fixed;*/
-
-/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#404040+0,404040+100&0.65+0,0+100 */
-background: -moz-radial-gradient(center, ellipse cover,  rgba(64,64,64,0.65) 0%, rgba(64,64,64,0) 100%); /* FF3.6-15 */
-background: -webkit-radial-gradient(center, ellipse cover,  rgba(64,64,64,0.65) 0%,rgba(64,64,64,0) 100%); /* Chrome10-25,Safari5.1-6 */
-background: radial-gradient(ellipse at center,  rgba(64,64,64,0.65) 0%,rgba(64,64,64,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6404040', endColorstr='#00404040',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	background: -moz-radial-gradient(center, ellipse cover,  rgba(64,64,64,0.65) 0%, rgba(64,64,64,0) 100%); /* FF3.6-15 */
+	background: -webkit-radial-gradient(center, ellipse cover,  rgba(64,64,64,0.65) 0%,rgba(64,64,64,0) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: radial-gradient(ellipse at center,  rgba(64,64,64,0.65) 0%,rgba(64,64,64,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6404040', endColorstr='#00404040',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 .tete_lecture .symbol{
     font-weight: bold;
