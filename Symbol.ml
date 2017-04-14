@@ -67,8 +67,8 @@ module Symbol =
     let rec (to_ascii: symbol -> string) =
       function
 	| B -> "_"
-	| U -> "u"
-	| Z -> "z"
+	| U -> "1"
+	| Z -> "0"
 	| D -> "$"
 	| S -> "#"
 		  
